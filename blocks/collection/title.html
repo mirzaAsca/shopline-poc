@@ -1,0 +1,36 @@
+{{#var title = block.settings.title | default(props.collection.title) /}}
+
+{{#if title }}
+  <div
+    class="body3 body-font-bold block-collection-card__title {{ block.settings | class_list() }}"
+    {{{ block.shopline_attributes }}}
+  >
+    {{ title }}
+  </div>
+{{/if}}
+
+{{#schema}}
+{
+  "name": "t:blocks.collection.title.name",
+  "tag": "",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:blocks.collection.title.settings.title.label",
+      "placeholder": "请输入分类标题名称"
+    },
+    {
+      "type": "style.size",
+      "id": "size",
+      "label": "t:blocks.collection.title.settings.size.label",
+      "default": {}
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.collection.title.presets.presets_0.name"
+    }
+  ]
+}
+{{/schema}}

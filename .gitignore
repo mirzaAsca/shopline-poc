@@ -1,0 +1,7 @@
+# OS / editor
+.DS_Store
+*.log
+node_modules/
+
+# SHOPLINE CLI local state
+.shopline/

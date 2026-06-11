@@ -1,0 +1,125 @@
+{{#capture content}}
+  {{#blocks}}
+    {{#if forblock.type == "$product-media" || forblock.type == "$product-media-group"}}
+      {{#block order=forblock.index /}}
+    {{/if}}
+  {{/blocks}}
+  {{#blocks}}
+    {{#if forblock.type == "$product-info"}}
+      {{#block order=forblock.index /}}
+    {{/if}}
+  {{/blocks}}
+{{/capture}}
+
+{{#component "product/detail" product=product can_update_url=true content=content section_type="main-product" /}}
+
+{{#var seo_variants = product | get_variants() /}}
+{{#var seo_media /}}
+
+{{~#if product.selected_or_first_available_variant.featured_media}}
+  {{#set seo_media = product.selected_or_first_available_variant.featured_media /}}
+{{~#else/}}
+  {{#set seo_media = product.featured_media /}}
+{{~/if}}
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": "{{product.title}}",
+    "url": "{{{request.origin | append(product.url)}}}",
+    {{#if seo_media}}
+      "image": [
+        "{{{seo_media.preview_image.src}}}"
+      ],
+    {{/if}}
+    {{#if product.description}}
+      "description": {{{product.description | strip_html() | json()}}},
+    {{/if}}
+    {{#if product.selected_or_first_available_variant.sku}}
+      "sku": "{{product.selected_or_first_available_variant.sku}}",
+    {{/if}}
+    {{#if product.vendor}}
+    "brand": {
+      "@type": "Brand",
+      "name": "{{product.vendor}}"
+    },
+    {{/if}}
+    "offers": [
+      {{#for variant in seo_variants}}
+        {
+          "@type" : "Offer",
+          {{#if variant.sku}}
+            "sku": "{{variant.sku}}",
+          {{/if}}
+          {{#if variant.barcode | size() == 12}}
+            "gtin12": "{{variant.barcode}}",
+          {{/if}}
+          {{#if variant.barcode | size() == 13}}
+            "gtin13": "{{variant.barcode}}",
+          {{/if}}
+          {{#if variant.barcode | size() == 14}}
+            "gtin14": "{{variant.barcode}}",
+          {{/if}}
+          "availability" : "https://schema.org/{{#if variant.available}}InStock{{#else/}}OutOfStock{{/if}}",
+          "price" : "{{variant.price | divided_by(100, integer=false)}}",
+          "priceCurrency" : "{{localization.country.currency.iso_code}}",
+          "url": "{{{request.origin | append(variant.url)}}}"
+        }{{#if !forloop.last}},{{/if}}
+      {{/for}}
+    ]
+  }
+</script>
+
+{{#schema}}
+{
+  "name": "t:sections.main_product.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.main_product.settings.color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "style.layout",
+      "id": "layout",
+      "label": "t:sections.main_product.settings.layout.label",
+      "default": {
+        "flex-direction": "row",
+        "flex-wrap": "nowrap",
+        "row-gap": "60px",
+        "column-gap": "60px",
+        "@media (--mobile)": {
+          "flex-direction": "column",
+          "row-gap": "20px",
+          "column-gap": "20px"
+        }
+      }
+    },
+    {
+      "type": "style.spacing",
+      "id": "spacing",
+      "label": "t:sections.main_product.settings.spacing.label",
+      "default": {
+        "padding-block-start": "60px",
+        "padding-block-end": "60px",
+        "@media (--mobile)": {
+          "padding-block-start": "20px",
+          "padding-block-end": "20px"
+        }
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "$product-media-group",
+      "limit": 1
+    },
+    {
+      "type": "$product-info",
+      "limit": 1
+    }
+  ]
+}
+{{/schema}}
