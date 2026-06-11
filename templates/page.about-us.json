@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main-page": {
+      "type": "main-page"
+    },
+    "about-image-with-text": {
+      "type": "image-with-text"
+    },
+    "about-columns": {
+      "type": "text-columns-with-image"
+    },
+    "about-rich-text": {
+      "type": "rich-text"
+    }
+  },
+  "order": ["main-page", "about-image-with-text", "about-columns", "about-rich-text"]
+}
