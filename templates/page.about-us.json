@@ -3,15 +3,33 @@
     "main-page": {
       "type": "main-page"
     },
+    "about-rich-text": {
+      "type": "rich-text",
+      "settings": {},
+      "blocks": {
+        "about_heading": {
+          "type": "heading",
+          "settings": {
+            "text": "About Us — built & deployed via SHOPLINE CLI ✅",
+            "text_align": "center",
+            "text_size": "title1"
+          }
+        },
+        "about_body": {
+          "type": "rich-text",
+          "settings": {
+            "content": "<p>This page template (page.about-us.json) was written locally, committed to GitHub, and pushed live to the store with <strong>sl theme push</strong> — no manual theme-editor steps. If you can read this on the storefront, the CLI &rarr; store pipeline works end to end. 🚀</p>"
+          }
+        }
+      },
+      "block_order": ["about_heading", "about_body"]
+    },
     "about-image-with-text": {
       "type": "image-with-text"
     },
     "about-columns": {
       "type": "text-columns-with-image"
-    },
-    "about-rich-text": {
-      "type": "rich-text"
     }
   },
-  "order": ["main-page", "about-image-with-text", "about-columns", "about-rich-text"]
+  "order": ["main-page", "about-rich-text", "about-image-with-text", "about-columns"]
 }
