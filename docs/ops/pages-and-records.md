@@ -8,8 +8,8 @@ The single most important distinction for migration automation:
 |---|---|---|
 | What | layout + content composition | the route + title + which template |
 | Where | `templates/` in the theme | store database |
-| Tool | `sl theme push` | Admin REST API (or admin UI) |
-| Auth | theme-CLI session | **separate** Admin API token |
+| Tool | `sl theme push` | Admin **UI**, or its internal session-authed API (NO public API — see below) |
+| Auth | theme-CLI session | admin **login session** (cookies) — **not** the OAuth app token |
 | Without it | page renders with default `page.json` | **route 404s** even if the template exists |
 
 ## Step 1 — Create the template (CLI)
@@ -65,49 +65,28 @@ The naming convention `page.<suffix>.json` makes `<suffix>` (here `about-us`) ap
 
 ## Step 2 — Create the page record
 
-The theme CLI has **no page endpoint**. Two ways:
+The theme CLI has **no page endpoint**, and ⚠️ **neither does SHOPLINE's public Admin API.**
 
-### A) Admin UI (manual, no token)
-Admin → Online Store → Pages → *Add page* → set title → **Theme template: `about-us`** → Save. Then `/pages/about-us` renders.
+> **❌ CORRECTION (verified 2026-06-12 on `mirza-asca` with a valid custom-app token):** there is **no `pages` resource** in SHOPLINE's public Admin API. Proof: probed ~25 REST paths (`/store/blogs.json` → 200, but every `pages`/`page`/`custom_pages` path → 404 / "script tag data not found"), and **introspected the full GraphQL Admin schema** at `/admin/graph/{ver}/graphql.json` — all **96 mutations**, with `productCreate`/`collectionCreate`/`scriptTagCreate`/`blog*` present but **zero page mutation** (the only `*Page*` types are pagination helpers like `PageInfo`). The earlier `POST …/pages.json` claim came from a bad web citation and is **disproven**. `scripts/create-page.sh` does **not** work — see its deprecation header.
 
-### B) Admin REST API (terminal, automatable) ✅ preferred for the pipeline
+So a page record can only be created two ways, **both using the admin login session (cookies), not the OAuth app token**:
 
-> ⚠️ **Validation status:** the endpoint pattern + auth below are confirmed from SHOPLINE docs and a verified **sibling** endpoint (`store/blogs.json`), but the *pages* create call itself was **not executed during the POC** (the POC page was made in the admin UI). [`scripts/create-page.sh`](../../scripts/create-page.sh) is therefore **untested end-to-end** — verify the first real run. See [09-validation-status](../validation-status.md).
+### A) Admin UI (manual, reliable)
+Admin → Online Store → Pages → *Add page* → set title → **Theme template: `<suffix>`** → Save. Then `/pages/<suffix>` renders. This is the **verified** path; only the page record needs it — the template (Step 1) is 100% CLI.
 
-```
-POST https://${SL_STORE}/admin/openapi/${SL_API_VERSION}/pages.json
-Authorization: Bearer ${SL_TOKEN}
-Content-Type: application/json; charset=utf-8
+### B) Automate the internal admin API via CDP (capture-and-replay)
+The Admin UI's "Add page" form POSTs to SHOPLINE's **internal** admin API (session/cookie-authed). To automate page creation without clicking:
+1. Log into the admin in the isolated Chrome ([deploy-publish-validate.md](deploy-publish-validate.md) — same CDP setup).
+2. With CDP network capture on, add a page once (or watch the request) → capture the exact internal endpoint + payload + cookies.
+3. Replay that request in a script for subsequent pages (same pattern as the publish `changeThemeStatus` trick — using a session you already hold, not a public API).
 
-{ "page": { "title": "About Us",
-            "body_html": "<p>Optional inline body</p>",
-            "template_suffix": "about-us" } }
-```
-- `template_suffix` → links the page to `templates/page.<suffix>.json`. Empty/null → default `page.json`.
-- `body_html` flows into the `main-page` section's body area.
-
-Reusable helper (committed): [`scripts/create-page.sh`](../../scripts/create-page.sh)
-```bash
-export SL_TOKEN="…"                                  # one-time, see token setup below
-./scripts/create-page.sh "About Us" about-us "<p>Body</p>"
-./scripts/create-page.sh "FAQ" faq                   # body optional
-```
-
-### Getting an Admin API token (one-time, in admin)
-
-SHOPLINE uses **direct token generation, not OAuth**:
-1. (If needed) ask your SHOPLINE contact to enable the **API Auth** feature.
-2. Admin → Settings → **Staff Settings** → create an admin staff member.
-3. Open that staff → **API Auth** tab → **select the APIs** to authorize (include pages / `write_content`).
-4. Optionally set expiry + IP allowlist → **Generate** → copy the token into `${SL_TOKEN}`.
-
-After this one-time step, page creation is **100% terminal** — no admin UI per page.
+> This is the only automatable route. It depends on an admin session and an internal endpoint that is **undocumented and may change** — treat as ⚠️ and keep a UI fallback. (Runbook/script: TODO once captured.)
 
 ## Migration implication
 
 For each source page that becomes a standalone SHOPLINE page:
-1. Build/choose a `page.<handle>.json` template (CLI push).
-2. `create-page.sh "<Title>" <handle> "<body?>"` to mint the route.
+1. Build/choose a `page.<handle>.json` template (CLI push) — fully automated.
+2. Mint the page record + attach the template (`template_suffix = <handle>`) via **A** (UI) or **B** (captured internal API).
 3. Validate ([06](deploy-publish-validate.md)).
 
-Products, collections, blog posts have their **own** Admin API resources (`products.json`, `collections`, blog endpoints) — same auth pattern, different endpoints.
+What the **public Admin API DOES** support (verified — Bearer app token works): blogs (`/store/blogs.json`), products (`/products/products.json`), collections, script tags, customers, discounts (full list = the 96 GraphQL mutations). So blog posts/products/collections for a migration ARE API-creatable — only standalone **pages** are not.

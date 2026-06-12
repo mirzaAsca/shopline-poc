@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# Create a SHOPLINE online-store page from the terminal via the Admin REST API.
-# Links the page to a CLI-built theme template via template_suffix (e.g. page.about-us.json -> "about-us").
+# ❌ DEPRECATED / DOES NOT WORK — kept only as a record.
+# Verified 2026-06-12 on mirza-asca with a valid app token: SHOPLINE's public Admin API
+# has NO `pages` resource. REST `…/pages.json` → 404; the full GraphQL Admin schema (96
+# mutations) has NO page mutation. This script's POST will 404. See LEARNINGS.md and
+# docs/ops/pages-and-records.md. Pages must be created via the Admin UI or by capturing/
+# replaying SHOPLINE's internal (session-authed) admin API — NOT this token-based call.
 #
-# One-time setup: get a token in Admin > Settings > Staff Settings > (admin staff) > API Auth > Generate
-#   (authorize the "pages"/write_content scope). Then export it:
-#     export SL_TOKEN="eyJ..."
+# (Original intent, left for context:)
+# Create a SHOPLINE online-store page via the Admin REST API, linking a template via template_suffix.
 #
 # Usage:
 #   ./scripts/create-page.sh "About Us" about-us "<p>Optional body HTML</p>"
