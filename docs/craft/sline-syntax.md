@@ -75,8 +75,8 @@ Declare fallback assets at the **top** of the file (before use).
 
 | Shopify | Bottle |
 |---------|--------|
-| `{% assign x = y %}` | `{{#var x = y /}}` |
-| `{% assign x = z %}` | `{{#set x = z /}}` |
+| `{% assign x = y %}` (first declare) | `{{#var x = y /}}` |
+| `{% assign x = z %}` (reassign) | `{{#set x = z /}}` |
 | `{% if %}` / `{% endif %}` | `{{#if }}` / `{{/if}}` |
 | `{% elsif %}` | `{{#else if cond /}}` |
 | `{% else %}` | `{{#else/}}` |
@@ -84,7 +84,7 @@ Declare fallback assets at the **top** of the file (before use).
 | `{% render 'x' %}` | `{{#component "x" /}}` |
 | `{{ 'a' \| asset_url }}` | `` {{ `a` \| asset_url() }} `` |
 | `{{ 'k' \| t }}` | `{{ "k" \| t() }}` |
-| `{{ block.shopify_attributes }}` | `{{{ block.shopline_attributes }}}}` |
+| `{{ block.shopify_attributes }}` | `{{{ block.shopline_attributes }}}` |
 | `content_for_layout` | `{{#content "layout" /}}` (layout slots vary; check base theme) |
 
 | Context | Bottle |

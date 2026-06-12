@@ -2,16 +2,25 @@
 .DS_Store
 *.log
 node_modules/
+.vscode/
+.idea/
+
+# Claude Code local (personal permissions/overrides — commands/ + rules/ stay tracked)
+.claude/settings.local.json
 
 # SHOPLINE CLI local state
 .shopline/
 
 # Secrets — never commit real values (use .env.example as the template)
 .env
-.env.local
+.env.*
+!.env.example
 
+# Node — package-lock.json is intentionally COMMITTED for reproducible installs
 
-# Visual-diff harness output + test artifacts
+# Visual-diff harness output + Playwright test artifacts
 scripts/visual-diff/out/
 test-results/
 playwright-report/
+blob-report/
+.last-run.json

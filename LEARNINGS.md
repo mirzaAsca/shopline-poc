@@ -18,9 +18,9 @@
 ## seed — verified during the POC (carry forward)
 - **Use `@shoplineos/cli` (`sl`), not `@shoplinedev/cli`.** The latter can't push OS 3.0/Bottle themes. → `docs/ops/cli-reference.md`, `docs/troubleshooting.md`.
 - **`sl theme push -p` (publish) is a no-op.** Publish via the `changeThemeStatus` API. → `docs/ops/deploy-publish-validate.md`.
-- **A template ≠ a page route.** `/pages/<handle>` 404s until a page record exists (Admin API). → `docs/ops/pages-and-records.md`.
+- **A template ≠ a page route.** `/pages/<handle>` 404s until a page record exists (internal admin API, via `scripts/create-page.mjs`). → `docs/ops/create-custom-pages.md`.
 - **The store can be password-gated** ("Opening soon") — public fetch sees the gate; drive the isolated Chrome/CDP instead. → `docs/ops/deploy-publish-validate.md`.
-- **Unverified (⚠️):** Admin page-create API + `scripts/create-page.sh`, menu API, redirects API. → `docs/validation-status.md`. Verify before relying on them unattended.
+- **Unverified (⚠️):** menu API, redirects API. → `docs/validation-status.md`. Verify before relying on them unattended. *(Page creation is RESOLVED — internal admin API via `scripts/create-page.mjs`; the old `create-page.sh` was deleted.)*
 
 <!-- New entries below this line. Append; do not edit existing ones. -->
 

@@ -1,7 +1,7 @@
-# PROMPT — Phase 1: Generate the migration plan (SPECS.md)
+# PROMPT — Phase 1: Generate a migration spec
 
 > Reusable across every to-Shopline migration. Invoke via `/plan-migration <source-url-or-html> [mode]` or `cat prompts/PLAN.md | claude`.
-> **This phase plans only. It writes SPECS.md and nothing else — no theme code.**
+> **This phase plans only. It writes one new `specs/<NN>-<type>-<slug>.md` file and nothing else — no theme code.**
 
 You are a senior SHOPLINE OS 3.0 **Bottle** theme migration engineer. Your job in this phase is to **analyze a source website and produce a complete, self-contained plan** as a **new, descriptively-named spec file in `specs/`** (e.g. `specs/01-full-initial-migration.md`, or later `specs/02-fix-ux-on-homepage.md`, `specs/03-redesign-hero.md`). One spec file = one unit of work. **Every implementable line in it is a checkbox (`- [ ]`).**
 

@@ -41,7 +41,7 @@ node -e "require('$(npm root -g)/@shoplineos/cli/dist/services/theme/api.js')\
 
 **Symptom:** Template exists and pushed, but the storefront route 404s.
 **Cause:** No **page record**. The template is theme code; the page is store data.
-**Fix:** Create the page via Admin API ([`scripts/create-page.sh`](../scripts/create-page.sh)) or admin UI, with `template_suffix` = your template's suffix. See [05](ops/create-custom-pages.md).
+**Fix:** Create the page via the verified internal admin API helper ([`scripts/create-page.mjs`](../scripts/create-page.mjs)) or Admin UI. The helper attaches the template with `templateName` (for example `templates/page.about-us.json`). See [05](ops/create-custom-pages.md).
 
 ## Public fetch of the storefront shows "Opening soon" / no content
 
@@ -57,9 +57,9 @@ node -e "require('$(npm root -g)/@shoplineos/cli/dist/services/theme/api.js')\
 
 ## Admin API call returns 401/403
 
-**Symptom:** `pages.json` POST rejected.
-**Cause:** Missing/invalid token, wrong scope, or expired/IP-restricted token. (The theme-CLI session is **not** an Admin API token.)
-**Fix:** Generate a token in Admin → Settings → Staff Settings → API Auth, authorize pages/`write_content`, set IP allowlist correctly, put it in `${SL_TOKEN}`. See [05](ops/create-custom-pages.md#getting-an-admin-api-token-one-time-in-admin).
+**Symptom:** Public Admin REST calls for blogs/articles/products return 401/403.
+**Cause:** Missing/invalid `${SL_TOKEN}`, wrong scope, or expired/IP-restricted token. The theme-CLI session is **not** an Admin API token.
+**Fix:** Generate a token in Admin → Settings → Staff Settings → API Auth, authorize the needed resource scopes, set the IP allowlist correctly, and put it in `${SL_TOKEN}`. Custom pages are different: they have no public API and use the admin browser session via [`scripts/create-page.mjs`](../scripts/create-page.mjs). See [05](ops/create-custom-pages.md).
 
 ## Two `*.myshopline.com` domains (redirect surprises)
 
@@ -98,4 +98,3 @@ node -e "require('$(npm root -g)/@shoplineos/cli/dist/services/theme/api.js')\
 | Color variable renders as `#000` / invalid | Forgot `rgba()` wrapper around the R,G,B triplet | Use `rgba(var(--color-text))` not `var(--color-text)` |
 | Customizer spacing/layout has no effect | Value also hardcoded in `.css`, or `class_list()` missing | Render `{{ settings | class_list() }}`; remove the duplicate CSS rule |
 | Mobile spacing same as desktop | No `@media (--mobile)` block in the `style.*` default | Add `"@media (--mobile)"` overrides to the setting |
-

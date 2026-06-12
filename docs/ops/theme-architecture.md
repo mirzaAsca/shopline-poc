@@ -87,6 +87,8 @@ The primary building units. Grouped by role:
 **Content (page-building — the migration workhorses)**
 `rich-text`, `image-with-text`, `text-columns-with-image`, `image-banner`, `slideshow`, `video`, `faq`, `collection-list`, `featured-collection`, `featured-product`, `recommended-product`, `sign-up-and-save`, `custom-html`, `custom-section`, `custom-page`, `contact-form`, `apps`, `blog`
 
+`custom-html` exists in Bottle's stock catalog, but it is **not** a migration fallback under our v1 rules. If a source block has no clean stock match, author a reusable custom section instead.
+
 **Page "main" sections (bound to a page type's data)**
 `main-page`, `main-product`, `main-collection-cover`, `main-collection-products`, `main-collections-all`, `main-article`, `main-blog`, `main-search`, `main-not-found`, `main-order-tracking`, `main-password`, `main-cart-items`, `main-cart-footer`
 
@@ -190,7 +192,7 @@ global look ← theme.schema.json/theme.config.json (colors, fonts, cards)
 | Product grid / featured | `featured-collection` / `featured-product` / `collection-list` |
 | Newsletter signup | `sign-up-and-save` |
 | Embedded video | `video` |
-| Arbitrary HTML/widget | `custom-html` / `custom-section` |
+| Arbitrary HTML/widget | New reusable custom section (do not use `custom-html` as a migration fallback) |
 | Static page (About, Terms…) | `page.<suffix>.json` template + page record ([05](create-custom-pages.md)) |
 | Nav menu | header menu (store navigation data, Admin) + `header` section |
 | Footer columns / social | `footer` section + `media_sosial` global settings |

@@ -63,13 +63,13 @@ sl theme pull --theme ${SL_THEME_ID} --only templates/page.about-us.json --path 
 The naming convention `page.<suffix>.json` makes `<suffix>` (here `about-us`) appear:
 - in the **theme editor's "Custom page ›" navigator**, and
 - in **Admin → Pages → template picker**, and
-- as the `template_suffix` value for the Admin API (Step 2).
+- as the page's template **suffix** in Step 2. *(The internal page API attaches the template by full path — `templateName: "templates/page.<suffix>.json"` — there is no `template_suffix` field on the request; the suffix is just the `<suffix>` argument you pass to `create-page.mjs`.)*
 
 ## Step 2 — Create the page record
 
 The theme CLI has **no page endpoint**, and ⚠️ **neither does SHOPLINE's public Admin API.**
 
-> **❌ CORRECTION (verified 2026-06-12 on `mirza-asca` with a valid custom-app token):** there is **no `pages` resource** in SHOPLINE's public Admin API. Proof: probed ~25 REST paths (`/store/blogs.json` → 200, but every `pages`/`page`/`custom_pages` path → 404 / "script tag data not found"), and **introspected the full GraphQL Admin schema** at `/admin/graph/{ver}/graphql.json` — all **96 mutations**, with `productCreate`/`collectionCreate`/`scriptTagCreate`/`blog*` present but **zero page mutation** (the only `*Page*` types are pagination helpers like `PageInfo`). The earlier `POST …/pages.json` claim came from a bad web citation and is **disproven**. `scripts/create-page.sh` does **not** work — see its deprecation header.
+> **Correction (verified 2026-06-12 on `mirza-asca` with a valid custom-app token):** there is **no `pages` resource** in SHOPLINE's public Admin API. Proof: probed ~25 REST paths (`/store/blogs.json` → 200, but every `pages`/`page`/`custom_pages` path → 404 / "script tag data not found"), and **introspected the full GraphQL Admin schema** at `/admin/graph/{ver}/graphql.json` — all **96 mutations**, with `productCreate`/`collectionCreate`/`scriptTagCreate`/`blog*` present but **zero page mutation** (the only `*Page*` types are pagination helpers like `PageInfo`). The earlier `POST .../pages.json` claim came from a bad web citation and is **disproven**. The old `scripts/create-page.sh` was deleted; use `scripts/create-page.mjs`.
 
 So a page record can only be created two ways, **both using the admin login session (cookies), not the OAuth app token**:
 

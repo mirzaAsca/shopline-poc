@@ -32,3 +32,4 @@ node scripts/visual-diff/compare.mjs \
 - Full-page screenshots capture every scroll position; both sides use the same viewport so coordinates line up.
 - `compare.mjs` normalizes to a common width and pads height — fonts/anti-aliasing add score noise, so the **agent's review of the merged image** is the tie-breaker, and the score catches subtle drift the eye misses.
 - `out/` is gitignored.
+- **Password gate:** for a gated SHOPLINE preview, set `STOREFRONT_PASSWORD` in `.env` — `capture.mjs` submits it automatically (host-gated, so it never types it into a source-site form).

@@ -38,7 +38,7 @@ Expose typography and spacing through **theme settings** and section schemas whe
 
 ### 2.5 Color schemes
 
-Every section a merchant can add must expose a **`color_scheme`** setting so all theme-wide schemes are selectable on that section, and the section must **inherit its colors from the selected scheme** via `--color-*` CSS variables. Never hardcode brand colors in section CSS. See [§8](../craft/color-schemes.md).
+Every **merchant-addable** section — i.e. any section a merchant can insert into a page template from the customizer, **not** the fixed header/footer/layout groups — must expose a **`color_scheme`** setting so all theme-wide schemes are selectable on that section, and the section must **inherit its colors from the selected scheme** via `--color-*` CSS variables. Never hardcode brand colors in section CSS. See [§8](../craft/color-schemes.md).
 
 ### 2.6 Responsive layout via native controls
 

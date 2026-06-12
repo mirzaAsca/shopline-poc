@@ -7,7 +7,7 @@ Prerequisites and one-time setup to work with a SHOPLINE Bottle theme from the t
 | Tool | Version used | Notes |
 |---|---|---|
 | OS | macOS (Darwin 24.1) | Linux works too; paths in [06](deploy-publish-validate.md) for Chrome differ |
-| Node.js | v22.19.0 | **Node ≥ 18** required for the CDP validation scripts (they use the global `WebSocket`, added in Node 21/22). CLI itself needs ≥ 14 |
+| Node.js | v22.19.0 | **Node 22 recommended** for the CDP/admin helper scripts because they rely on the global `fetch` and `WebSocket`; the CLI itself needs ≥ 14 |
 | npm | 9.8.1 | |
 | git + gh | gh authed | `gh auth status` should show your account with `repo` + `workflow` scopes |
 | python3 | system | used by helper scripts for JSON encoding |
@@ -45,7 +45,9 @@ shopline-poc/
 ├─ .env.example            # template
 ├─ docs/                   # this documentation set
 ├─ scripts/
-│  └─ create-page.sh       # create a page record via Admin REST API
+│  ├─ create-page.mjs      # create a custom page via internal session-authed admin API
+│  ├─ create-blog.mjs      # create blogs/articles via public Admin REST API
+│  └─ visual-diff/         # desktop/mobile screenshot + pixel-diff harness
 ├─ blocks/ components/ i18n/ layout/ public/ sections/ templates/   # the Bottle theme
 ├─ theme.config.json theme.schema.json
 ```

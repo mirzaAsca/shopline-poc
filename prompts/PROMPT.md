@@ -19,9 +19,11 @@ Before building, **search the codebase with parallel subagents** to confirm the 
 - **Assets:** provided-first; if missing, scrape from the source into `public/images` (`docs/runbooks/scrape-assets.md`).
 - Comment non-obvious code with the *why*.
 
-## 5. Test (back-pressure) + validate
-- Write the planned **`tests/<name>.test.js`** (Playwright) for this task and **run it** (`docs/runbooks/testing.md`). Each test must **document what it guards and why** (future loops have no memory). Tests must pass.
-- **Visual validation (mandatory for any UI task):** run the side-by-side harness (`docs/runbooks/visual-qa.md`) at **desktop AND mobile** — capture original + new at matched scroll coords, merge into one image, review it, and check the pixel-diff score. Must match the source.
+## 5. Deploy, test (back-pressure) + validate
+- If the task changes theme files, push the relevant files to `${SL_THEME_ID}` before storefront validation (`sl theme push --theme ${SL_THEME_ID} --only <file>` or a full push per `docs/ops/cli-reference.md`). If the task creates routes/content, create the required records (`scripts/create-page.mjs`, `scripts/create-blog.mjs`, or verified Admin UI/API flow) before validation.
+- For fresh migration stores, publish via the status-swap API when the task reaches a deployable storefront state, per `docs/principles/migration-decisions.md` and `docs/ops/deploy-publish-validate.md`. Check `docs/validation-status.md` before any unattended step that relies on a ⚠️ capability.
+- Write the planned **`tests/<name>.test.js`** (Playwright) for this task and **run it** (`docs/runbooks/testing.md`). Each test must **document what it guards and why** (future loops have no memory). Tests must pass. *(First run only: if `node_modules/` is absent, `npm install && npx playwright install chromium`.)*
+- **Visual validation (mandatory for any UI task):** run the side-by-side harness (`docs/runbooks/visual-qa.md`) at **desktop AND mobile** — capture original + new at matched scroll coords, merge into one image, review it, and check the pixel-diff score. Must match the source. The harness auto-clears the storefront password gate when `STOREFRONT_PASSWORD` is set in `.env`.
 
 ## 6. Close the loop
 - Tick the task `[x]` in its `specs/*.md` file; record any non-obvious **decision + why** in that spec's Decision log.

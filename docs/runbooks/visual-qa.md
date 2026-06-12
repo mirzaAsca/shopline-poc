@@ -7,7 +7,7 @@ An agent that screenshots the original, then later the new page, must *remember*
 
 ## The harness
 `scripts/visual-diff/` (see its README):
-- `capture.mjs` — given a URL + label + viewport, save full-page (and per-scroll-band) screenshots.
+- `capture.mjs` — given a URL + label + viewport, save a **full-page** screenshot (scrolls first so lazy content renders). On a SHOPLINE host it auto-submits `STOREFRONT_PASSWORD` (from `.env`) to clear the storefront password gate.
 - `compare.mjs` — given original + new captures, **merge side-by-side**, run **pixelmatch**, emit a merged image, a diff image, and a `report.json` with a per-page/per-viewport score.
 
 ## Protocol (per page)

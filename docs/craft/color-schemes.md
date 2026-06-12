@@ -59,6 +59,8 @@ A single loop turns every scheme into a `.color-{id}` class exposing `--color-*`
 
 Color values are exposed as **`R, G, B` triplets**, so always wrap them in `rgba(var(--color-x))` (optionally with alpha) in CSS. Adding a scheme to `theme.config.json` requires **no change here** — the loop emits its class automatically.
 
+> **Why `.red`/`.green`/`.blue` work:** SHOPLINE parses each hex/rgba string in `theme.config.json` (e.g. `"#F3F2E0"`) into a color object at runtime, so `scheme.settings.color_x.red` / `.green` / `.blue` resolve to the 0–255 channel values the loop above emits.
+
 ### 8.3 Step 1 — expose the picker in the section schema
 
 Every merchant-addable section adds a `color_scheme` setting:
