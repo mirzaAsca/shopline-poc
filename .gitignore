@@ -10,8 +10,6 @@ node_modules/
 .env
 .env.local
 
-# Live view of agent memory (symlink, not committed)
-/agent-memory
 
 # Visual-diff harness output + test artifacts
 scripts/visual-diff/out/

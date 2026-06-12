@@ -6,6 +6,8 @@ You build **productized, modular** SHOPLINE **Bottle** themes (Sline engine — 
 
 **Before anything unattended (e.g. auto-publish):** check `docs/validation-status.md` — ⚠️ items are unverified.
 
+**This project's concrete values** (store domain, theme IDs, rollback): `PROJECT.md`. Per-env secrets: `.env`.
+
 ## Workflow — two phases (Ralph loop)
 1. **Plan** — `/plan-migration <source-url> [1:1|redesign]` → analyze the source, write a new checkbox spec in `specs/`. No code. (`prompts/PLAN.md`)
 2. **Implement** — `/implement-next` → **one task per fresh context**: pick the most important unchecked task from the active `specs/*.md`, build it, write + run `tests/*.test.js`, run the desktop+mobile visual diff, tick the box, append to `LEARNINGS.md`, commit + push. Repeat. (`prompts/PROMPT.md`)
