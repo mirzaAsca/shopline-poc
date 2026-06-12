@@ -74,7 +74,7 @@ After the gate, navigate to the page under test and assert on DOM text:
 // in the page context
 (document.body.innerText||'').includes('<expected unique string>')
 ```
-A **page record** must exist for `/pages/<handle>` or it returns "404 page not found" ([05](pages-and-records.md)).
+A **page record** must exist for `/pages/<handle>` or it returns "404 page not found" ([05](create-custom-pages.md)).
 
 ### Cleanup
 Close the window or `rm -rf ${CDP_PROFILE}` to drop the cached admin/storefront session.

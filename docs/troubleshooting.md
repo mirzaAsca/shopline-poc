@@ -41,7 +41,7 @@ node -e "require('$(npm root -g)/@shoplineos/cli/dist/services/theme/api.js')\
 
 **Symptom:** Template exists and pushed, but the storefront route 404s.
 **Cause:** No **page record**. The template is theme code; the page is store data.
-**Fix:** Create the page via Admin API ([`scripts/create-page.sh`](../scripts/create-page.sh)) or admin UI, with `template_suffix` = your template's suffix. See [05](ops/pages-and-records.md).
+**Fix:** Create the page via Admin API ([`scripts/create-page.sh`](../scripts/create-page.sh)) or admin UI, with `template_suffix` = your template's suffix. See [05](ops/create-custom-pages.md).
 
 ## Public fetch of the storefront shows "Opening soon" / no content
 
@@ -59,7 +59,7 @@ node -e "require('$(npm root -g)/@shoplineos/cli/dist/services/theme/api.js')\
 
 **Symptom:** `pages.json` POST rejected.
 **Cause:** Missing/invalid token, wrong scope, or expired/IP-restricted token. (The theme-CLI session is **not** an Admin API token.)
-**Fix:** Generate a token in Admin → Settings → Staff Settings → API Auth, authorize pages/`write_content`, set IP allowlist correctly, put it in `${SL_TOKEN}`. See [05](ops/pages-and-records.md#getting-an-admin-api-token-one-time-in-admin).
+**Fix:** Generate a token in Admin → Settings → Staff Settings → API Auth, authorize pages/`write_content`, set IP allowlist correctly, put it in `${SL_TOKEN}`. See [05](ops/create-custom-pages.md#getting-an-admin-api-token-one-time-in-admin).
 
 ## Two `*.myshopline.com` domains (redirect surprises)
 

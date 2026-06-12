@@ -61,7 +61,7 @@ A template is a JSON file naming the sections (and their order) for a page type.
 | `gift_card.html` / `policy.html` / `proofing.html` | system pages (raw html) | |
 | `customers/*.json` | account, login, register, orders, order, addresses, company, activate_account, forgot_password | account area |
 
-**Suffix variants → the migration lever.** A file named `page.<suffix>.json` becomes a selectable template called `<suffix>`. e.g. `page.about-us.json` → assignable to a page via `template_suffix: "about-us"`. This is how you create per-page custom layouts. See [05](pages-and-records.md).
+**Suffix variants → the migration lever.** A file named `page.<suffix>.json` becomes a selectable template called `<suffix>`. e.g. `page.about-us.json` → assignable to a page via `template_suffix: "about-us"`. This is how you create per-page custom layouts. See [05](create-custom-pages.md).
 
 ### Template JSON shape
 
@@ -75,7 +75,7 @@ A template is a JSON file naming the sections (and their order) for a page type.
 ```
 - `type` = a section name from `sections/`.
 - Sections referenced with only `{ "type": … }` render from their **preset defaults** (good enough to show content immediately).
-- To inject explicit content, populate `settings` and nested `blocks` (each block has `type`, `settings`, and `block_order`). See the worked example in [05](pages-and-records.md).
+- To inject explicit content, populate `settings` and nested `blocks` (each block has `type`, `settings`, and `block_order`). See the worked example in [05](create-custom-pages.md).
 
 ## Sections catalog (`sections/`)
 
@@ -191,7 +191,7 @@ global look ← theme.schema.json/theme.config.json (colors, fonts, cards)
 | Newsletter signup | `sign-up-and-save` |
 | Embedded video | `video` |
 | Arbitrary HTML/widget | `custom-html` / `custom-section` |
-| Static page (About, Terms…) | `page.<suffix>.json` template + page record ([05](pages-and-records.md)) |
+| Static page (About, Terms…) | `page.<suffix>.json` template + page record ([05](create-custom-pages.md)) |
 | Nav menu | header menu (store navigation data, Admin) + `header` section |
 | Footer columns / social | `footer` section + `media_sosial` global settings |
 | Brand colors / fonts | `theme.config.json` color_schemes + `font` group |

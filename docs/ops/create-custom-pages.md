@@ -1,8 +1,10 @@
-# 05 — Pages & Templates: CLI vs Admin API
+# Create custom pages (CMS) + attach templates
+
+> Custom pages = `/pages/<handle>` (About, FAQ, …). One of the route types in [content-and-routes.md](content-and-routes.md). For **blogs/articles** see [create-blogs.md](create-blogs.md).
 
 The single most important distinction for migration automation:
 
-> **A template is theme code (CLI). A page is store data (Admin API).** Creating one does not create the other.
+> **A template is theme code (CLI). A page is store data (created via SHOPLINE's internal admin API — there is NO public page API).** Creating one does not create the other.
 
 | | Template (`page.<suffix>.json`) | Page record (`/pages/<handle>`) |
 |---|---|---|

@@ -78,7 +78,7 @@ node -e "const api=require('$(npm root -g)/@shoplineos/cli/dist/services/theme/a
 Exports available on that module (only `changeThemeStatus` is **verified** here — the rest are present but unverified, see [09](../validation-status.md)):
 `changeThemeStatus`, `createFile`, `updateFile`, `uploadFile`, `getThemeFileDetail`, `getThemeInfo`, `getThemeListWithPagination`, `downloadThemePackage`, `getPublishedThemeInstance`, `uploadThemePackageFile`, `uploadPrivateThemePackage`, `createNewThemeOrCompleteUpload`.
 
-> ⚠️ **Internal/undocumented.** This bypasses the public CLI surface and can break on any `@shoplineos/cli` update. Use it only for what `sl` lacks (currently: publish); prefer official commands otherwise. Base URLs the module talks to: `${store}/admin/api/site/theme` (theme ops) and `${store}/admin/api/merchant-bff`. These are **not** the Admin OpenAPI ([05](pages-and-records.md)).
+> ⚠️ **Internal/undocumented.** This bypasses the public CLI surface and can break on any `@shoplineos/cli` update. Use it only for what `sl` lacks (currently: publish); prefer official commands otherwise. Base URLs the module talks to: `${store}/admin/api/site/theme` (theme ops) and `${store}/admin/api/merchant-bff`. These are **not** the Admin OpenAPI ([05](create-custom-pages.md)).
 
 ## What the CLI session can and cannot do
 
@@ -86,6 +86,6 @@ Exports available on that module (only `changeThemeStatus` is **verified** here 
 |---|---|
 | pull / push / serve / package theme files | create **page records** (`/pages/x`) |
 | create/edit templates, sections, blocks, assets, i18n | create products / collections / blog posts |
-| change theme publish status (via api.js) | anything needing the Admin REST API → use a token ([05](pages-and-records.md)) |
+| change theme publish status (via api.js) | anything needing the Admin REST API → use a token ([05](create-custom-pages.md)) |
 
 The theme-CLI token is **separate** from the Admin OpenAPI token. Don't conflate them.

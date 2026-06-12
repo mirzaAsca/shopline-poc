@@ -14,6 +14,7 @@
 - **Localization:** carry over **all** source languages into `i18n/<locale>.json`.
 - **SEO/URLs:** preserve handles + 301 redirects + meta (title/description/og).
 - **Navigation:** recreate as SHOPLINE store menus (Admin) + wire the Bottle `header`. *(Menu API unconfirmed — see [validation-status](../validation-status.md).)*
+- **Route parity is MANDATORY:** reproduce **every** source route. **Custom pages** (`/pages/x`) via the internal API ([../ops/create-custom-pages.md](../ops/create-custom-pages.md)); **blogs/articles** (`/blogs/x`) — in scope as content — via the public API ([../ops/create-blogs.md](../ops/create-blogs.md)); theme-predefined routes follow from templates+data. Full map: [../ops/content-and-routes.md](../ops/content-and-routes.md). Products/collections (commerce) stay deferred.
 
 ## Operations
 - **Tenancy:** one store per migration, isolated `.env`/token.

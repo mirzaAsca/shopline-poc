@@ -4,6 +4,8 @@
 
 Pipeline for **any platform → SHOPLINE (Bottle)** migration. The **source-scraping side is a separate workstream**; this doc locks the v1 decisions and shows where scraping plugs into the verified SHOPLINE/Bottle target side (docs 01–06).
 
+> 🔴 **MANDATORY phase — route parity.** A 1:1 migration must reproduce **every route** the source has (same paths/handles), not just visuals. Build the full route inventory in the spec and create each store record — custom pages, blogs, articles, products/collections — per [../ops/content-and-routes.md](../ops/content-and-routes.md). Pages use the internal API ([../ops/create-custom-pages.md](../ops/create-custom-pages.md)); blogs/articles use the public API ([../ops/create-blogs.md](../ops/create-blogs.md)). A missing route = an incomplete migration.
+
 ## Modes
 
 - **1:1** — reproduce the source UI/UX as faithfully as possible. **v1 target = pixel-close** (desktop *and* mobile).
@@ -58,7 +60,7 @@ Output: the **manifest** below.
 
 ### 5 — Deploy
 - `sl theme push --theme ${SL_THEME_ID}` (or `--only` per file) — [02](../ops/cli-reference.md).
-- Per static page: [`scripts/create-page.sh`](../../scripts/create-page.sh) with `template_suffix` + handle + meta — [05](../ops/pages-and-records.md).
+- Per static page: [`scripts/create-page.sh`](../../scripts/create-page.sh) with `template_suffix` + handle + meta — [05](../ops/create-custom-pages.md).
 - Create **menus** and **URL redirects** via Admin API (endpoints to confirm).
 
 ### 6 — Validate (the gate)

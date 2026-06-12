@@ -27,7 +27,9 @@ Full rules in `docs/principles/agent-workflow.md`. **Append every discovery/gotc
 | Understand the theme | `docs/ops/theme-architecture.md` |
 | CLI / pull / push | `docs/ops/cli-reference.md` |
 | Deploy / publish / validate | `docs/ops/deploy-publish-validate.md` |
-| Create a page route | `docs/ops/pages-and-records.md` |
+| Recreate routes/content (MANDATORY for 1:1) | `docs/ops/content-and-routes.md` |
+| Create a custom page (/pages/x) | `docs/ops/create-custom-pages.md` (`scripts/create-page.mjs`) |
+| Create a blog / article (/blogs/x) | `docs/ops/create-blogs.md` (`scripts/create-blog.mjs`) |
 | Store/theme setup | `docs/ops/environment-setup.md`, `docs/ops/store-and-theme-config.md` |
 | Plan a migration (write the spec) | `prompts/PLAN.md`, `docs/spec-template.md`, `specs/README.md` |
 | Migrate a whole page | `docs/runbooks/migrate-a-page.md` |
@@ -47,5 +49,5 @@ Full rules in `docs/principles/agent-workflow.md`. **Append every discovery/gotc
 4. Image setting type = `image` (not `image_picker`); resolve with `image_url()`.
 5. Every merchant-addable section: `color_scheme` setting + `style.layout/spacing/size` with `@media (--mobile)`, rendered via `class_list()`.
 6. Brand-neutral names everywhere; merchant copy only in editable content.
-7. A template ≠ a page route. No public page API — create page records with `scripts/create-page.mjs` (internal API `…/site/page/customize`; `templateName` attaches the template) or the Admin UI (`docs/ops/pages-and-records.md`).
+7. A template ≠ a page route. No public page API — create page records with `scripts/create-page.mjs` (internal API `…/site/page/customize`; `templateName` attaches the template) or the Admin UI (`docs/ops/create-custom-pages.md`).
 8. Publish = status-swap API (`sl theme push -p` is a no-op).

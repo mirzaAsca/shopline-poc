@@ -24,3 +24,17 @@
 **What:** Captured the Admin UI's "Create a new page" request via CDP on a logged-in admin tab. Endpoint: `POST /admin/api/site/page/customize` (session/cookie-authed — NOT the public OpenAPI). Body keys: `name.default` (title), `handle`, `customizePath:/pages/<handle>`, **`templateName:"templates/page.<suffix>.json"` (attaches the theme template)**, `status:1`, `seo{...}`. Replayed it programmatically (fetch from the logged-in page context) → `{"code":"SUCCESS","data":{"id":..,"customizePath":"/pages/.."}}`. Created 3 test pages on mirza-asca (CLI Test Page, api-test-page, script-test).
 **Why it matters:** completes the migration pipeline — template (CLI) + page record + attach (this API). Page content lives in the attached template's sections (no body_html). Reusable script committed: `scripts/create-page.mjs` (runs the POST inside the isolated logged-in Chrome). Public-API page creation remains impossible (REST/GraphQL have no page resource) — this internal endpoint is the only way.
 **Action:** Done — pages-and-records.md, validation-status.md, CLAUDE.md updated; create-page.sh deleted. Future: replay via CLI cookies+dfp-token to drop the browser dependency.
+
+## 2026-06-12 — Blogs & articles ARE in the public Admin API (verified)
+**What:** Created a blog and an article on mirza-asca with the Bearer app token.
+- Blog: `POST /admin/openapi/{ver}/store/blogs.json` `{"blog":{"title","handle"}}` → 200 + id.
+- Article: `POST /admin/openapi/{ver}/store/blogs/{id}/articles.json` `{"blog":{"title","content_html","handle","published":true}}` → 200 + id. GOTCHA: the article body is wrapped in **"blog"** (not "article") — `{"article":{…}}` returns 500 "title not allow blank".
+**Why it matters:** route parity for a 1:1 migration needs blogs/articles too, and these (unlike custom pages) use the PUBLIC token API. Reusable script: `scripts/create-blog.mjs`. Docs: `docs/ops/create-blogs.md`, `docs/ops/content-and-routes.md` (route hub). Also confirmed the GraphQL admin endpoint = `/admin/graph/{ver}/graphql.json` (96 mutations).
+**Action:** Done — dedicated content-creation docs added; route parity made MANDATORY in migration-decisions + migrate-a-page.
+
+## Route/content type map (quick ref)
+- Custom page `/pages/x` → internal API `…/site/page/customize` (session) — `scripts/create-page.mjs`.
+- Blog `/blogs/x` + article → public REST `store/blogs.json` / `store/blogs/{id}/articles.json` (token) — `scripts/create-blog.mjs`.
+- Product/collection → public `productCreate`/`collectionCreate` (deferred, commerce).
+- Home/cart/search/404/customer/product/collection pages → theme templates, route follows data.
+- Menus + redirects → store data, APIs still unconfirmed.
