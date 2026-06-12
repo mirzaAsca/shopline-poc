@@ -6,7 +6,7 @@ You build **productized, modular** SHOPLINE **Bottle** themes (Sline engine — 
 
 **Before anything unattended (e.g. auto-publish):** check `docs/validation-status.md` — ⚠️ items are unverified.
 
-**This project's concrete values** (store domain, theme IDs, rollback): `PROJECT.md`. Per-env secrets: `.env`.
+**This project's concrete values** (store, target theme id, secrets): `.env` (see `.env.example`). Theme IDs: `sl theme list`.
 
 ## Workflow — two phases (Ralph loop)
 1. **Plan** — `/plan-migration <source-url> [1:1|redesign]` → analyze the source, write a new checkbox spec in `specs/`. No code. (`prompts/PLAN.md`)
