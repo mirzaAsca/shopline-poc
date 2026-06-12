@@ -8,6 +8,8 @@ You build **productized, modular** SHOPLINE **Bottle** themes (Sline engine — 
 
 **This project's concrete values** (store, target theme id, secrets): `.env` (see `.env.example`). Theme IDs: `sl theme list`.
 
+**Learning/debugging SHOPLINE?** Consult **official docs FIRST** (`docs/ops/shopline-references.md`) — don't brute-force/guess endpoints. Record the resolving doc link in `LEARNINGS.md`.
+
 ## Workflow — two phases (Ralph loop)
 1. **Plan** — `/plan-migration <source-url> [1:1|redesign]` → analyze the source, write a new checkbox spec in `specs/`. No code. (`prompts/PLAN.md`)
 2. **Implement** — `/implement-next` → **one task per fresh context**: pick the most important unchecked task from the active `specs/*.md`, build it, write + run `tests/*.test.js`, run the desktop+mobile visual diff, tick the box, append to `LEARNINGS.md`, commit + push. Repeat. (`prompts/PROMPT.md`)
@@ -38,6 +40,7 @@ Full rules in `docs/principles/agent-workflow.md`. **Append every discovery/gotc
 | Assets (provided-first, else scrape) | `docs/runbooks/scrape-assets.md` |
 | Write / run tests | `docs/runbooks/testing.md` |
 | Audit a theme | `docs/runbooks/audit-a-theme.md` |
+| Learn / debug SHOPLINE (docs-first) | `docs/ops/shopline-references.md` (official links) |
 | Debug | `docs/troubleshooting.md` + `docs/validation-status.md` |
 
 > `.claude/rules/*` auto-load when you edit `sections/`, `blocks/`, `templates/`, `theme.config.json` — no action needed.

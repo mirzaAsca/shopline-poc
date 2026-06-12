@@ -38,3 +38,11 @@
 - Product/collection → public `productCreate`/`collectionCreate` (deferred, commerce).
 - Home/cart/search/404/customer/product/collection pages → theme templates, route follows data.
 - Menus + redirects → store data, APIs still unconfirmed.
+
+## 2026-06-12 — RULE: docs-first for SHOPLINE (don't brute-force)
+**What:** When debugging the test-page DELETE, I brute-forced 5 internal endpoint guesses — all returned `200 {"code":"SLE0006","message":"服务端错误"}` (server error). Wasteful. Per stakeholder direction: **consult the official SHOPLINE docs FIRST** for any SHOPLINE behavior/issue; only reverse-engineer genuinely undocumented internals as a last resort; record the doc link with the finding.
+**Action:** Added `docs/ops/shopline-references.md` (official links + when-to-use); wired into CLAUDE.md + `docs/principles/agent-workflow.md`.
+
+## 2026-06-12 — Deleting content
+- **Blog + article DELETE — verified (public API):** `DELETE /admin/openapi/{ver}/store/blogs/{blogId}/articles/{articleId}.json` → 200, then `DELETE /admin/openapi/{ver}/store/blogs/{blogId}.json` → 200. (Deleted test-blog/test-article.)
+- **Custom page DELETE — NO documented/working API found.** Page LIST = `GET /admin/api/site/page` (confirmed). All internal delete guesses (`/customize/{id}` DELETE, `/page/delete`, `/page/customize/delete`, `/batchDelete`, `/remove`) → SLE0006 server error. Custom pages have no public API at all → **delete them in the Admin UI** (Online Store → Page) until/unless the real internal delete is captured from the UI. (3 test pages still present on mirza-asca: cli-test-page, api-test-page, script-test.)

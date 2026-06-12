@@ -15,6 +15,7 @@
 - **Visual validation is mandatory for UI.** Side-by-side original|new at matched scroll coords, desktop **and** mobile, pixel-diff score + agent review of the merged image ([../runbooks/visual-qa.md](../runbooks/visual-qa.md)).
 - **Close every task:** tick its `[x]` in the spec, log any decision + why in that spec's Decision log, **append** discoveries to [`/LEARNINGS.md`](../../LEARNINGS.md) (append-only — record new gotchas, and bugs found *in our own instructions*), then commit with detail and push.
 - **Keep the source of truth current.** If you discover the guidance itself (`CLAUDE.md`/`docs/*`) is wrong, fix it as part of the task.
+- **Docs-first for SHOPLINE.** When you hit a SHOPLINE unknown or bug, consult the **official docs first** ([../ops/shopline-references.md](../ops/shopline-references.md)) — don't guess/brute-force endpoints. Reverse-engineering (capture/replay, schema introspection) is a last resort for genuinely undocumented things. Record the doc link in `LEARNINGS.md` with the finding.
 
 ## Source-of-truth chain
 `CLAUDE.md` (router) → `docs/principles/*` (read first) → `docs/craft/*` + `docs/ops/*` (on-demand) → the active `specs/*.md` (what to do) → `LEARNINGS.md` (what we've learned). Cite these in every spec task.
