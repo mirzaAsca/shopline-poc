@@ -33,7 +33,7 @@ Full rules in `docs/principles/agent-workflow.md`. **Append every discovery/gotc
 | Create a custom page (/pages/x) | `docs/ops/create-custom-pages.md` (`scripts/create-page.mjs`) |
 | Create a blog / article (/blogs/x) | `docs/ops/create-blogs.md` (`scripts/create-blog.mjs`) |
 | Store/theme setup | `docs/ops/environment-setup.md`, `docs/ops/store-and-theme-config.md` |
-| Plan a migration (write the spec) | `prompts/PLAN.md`, `docs/spec-template.md`, `specs/README.md` |
+| Plan a migration (write the spec) | `prompts/PLAN.md`, `docs/spec-template.md` |
 | Migrate a whole page | `docs/runbooks/migrate-a-page.md` |
 | Build one section | `docs/runbooks/build-a-section.md` |
 | Visual QA (side-by-side, desktop+mobile) | `docs/runbooks/visual-qa.md` |

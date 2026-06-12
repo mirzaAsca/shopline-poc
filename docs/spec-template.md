@@ -1,6 +1,6 @@
 # SPEC template — the required structure for a `specs/` file
 
-> Spec files do **not** ship in the template. The Phase-1 agent (`/plan-migration`) generates a **new, descriptively-named file in `specs/`** per unit of work (initial migration, a later fix, a redesign…). See `specs/README.md` for the naming/lifecycle convention. This file defines the structure each spec must follow. Model: codex ExecPlan (self-contained, checkboxed progress, decision log, observable validation) + our migration rules.
+> Spec files do **not** ship in the template. `/plan-migration` (Phase 1) generates a **new file in `specs/`** per unit of work, named **`specs/<NN>-<type>-<slug>.md`** (increasing `NN`) — e.g. `specs/01-full-initial-migration.md`, `specs/02-fix-ux-on-homepage.md`, `specs/03-redesign-hero.md`. One file = one unit of work; a spec is the **record** of that work and is **never deleted** (items get ticked `[x]`, not removed). The `specs/` folder is created by the first run. This file defines the structure each spec must follow. Model: codex ExecPlan (self-contained, checkboxed progress, decision log, observable validation) + our migration rules.
 >
 > **Rule: every implementable line is a checkbox (`- [ ]`)** — tasks, sub-steps, tests, asset actions, and QA items. Prose is allowed only in the Header / Purpose / Decision-log metadata sections.
 
