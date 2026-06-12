@@ -25,12 +25,31 @@ Spawn **parallel subagents** to fan out; the Chrome DevTools MCP renders JS-heav
 ## 3. Map source → Bottle (productized/modular ONLY)
 For each source block, choose a stock Bottle section where one fits, else **plan a new custom section** (never `custom-html`). Use the cheat-sheet in `docs/ops/theme-architecture.md`. Each page → a template (`index.json` or a new `page.<handle>.json`).
 
-## 4. Write the spec file in `specs/`
+## 4. Interview the user to resolve unknowns (iterate — don't guess)
+Planning ≠ guessing. Whenever something is ambiguous or consequential, **interview the user in focused cycles** (a few questions at a time), fold the answers into the plan, and **repeat across as many cycles as needed** until the plan is unambiguous. Probe every relevant aspect, e.g.:
+- **UX / UI:** fidelity (pixel-close vs adapted), layout, interactions & animations, hover/active/focus states, responsive behavior per breakpoint, which source design is canonical (e.g. v1 vs v2), empty/error states.
+- **Content & IA:** which pages/routes are in scope, navigation structure, copy/assets provided vs to-scrape, locales, SEO/handles to preserve.
+- **Logic & behavior:** forms, dynamic/JS-driven widgets, filtering/search, third-party embeds, theme-vs-app boundaries, anything interactive.
+- **Branding & design system:** color schemes, typography, spacing tokens; 1:1 vs redesign.
+- **Commerce (if applicable):** products/collections/cart scope (deferred by default).
+- **Scope & priorities:** what's in this unit of work vs deferred, edge cases, the visual-diff pass bar, definition of done.
+- **Anything wider** that materially changes the plan — ask rather than assume.
+
+## 5. Write the spec file in `specs/`
 Pick a **descriptive filename** (`specs/<NN>-<type>-<slug>.md`, increasing `NN`) so the folder history shows what was built and when. Follow `docs/spec-template.md` exactly:
 - **Phases** (foundation → sections → pages/nav/i18n/SEO → QA), each a list of **checkbox tasks**. **All implementable items — tasks, sub-steps, tests, asset actions, QA items — are checkboxes (`- [ ]`).**
 - Every task: Goal · References (cite `CLAUDE.md`/`docs/*` + source coordinates) · Steps · **Acceptance/validation** (incl. the side-by-side visual-diff at desktop+mobile per `docs/runbooks/visual-qa.md`).
 - **Plan the tests as their own checkbox items** — name each `tests/<name>.test.js` and state what it guards + why (per `docs/runbooks/testing.md`). Tests are *planned here, implemented in Phase 2*.
 - An **Assets register** (provided vs to-scrape) and a **Decision log** section.
 
-## 5. Output & stop
-Write the new `specs/<...>.md`, summarize its phases/task counts, and **stop**. Do not implement anything. If anything about the source or scope is genuinely ambiguous and would change the plan, ask the user a few interview questions before finalizing.
+## 6. Final cycle — feed findings back into the reusable setup
+Once everything is gathered and the spec is complete (possibly after several interview cycles), **interview the user ONE last time**: ask whether any findings/decisions from this planning are worth **baking into the reusable setup** so *future* migrations benefit. For each item the user confirms, update its **proper home — in this order of preference** (most reusable first):
+1. **`.claude/`** (rules / commands) — an always-on guardrail or workflow step.
+2. **`docs/`** (principles / craft / ops / runbooks) — durable, reusable guidance.
+3. **`CLAUDE.md`** — only top-level routes / non-negotiables.
+4. **this `specs/` file** — if it's specific to this one unit of work.
+5. **`LEARNINGS.md` — LAST RESORT ONLY**, and only when you are **100% sure the finding is valid** and it has no better home above (it's the diary, not the canon — see its header rubric).
+Apply the confirmed updates before finishing.
+
+## 7. Output & stop
+Write/finalize the `specs/<...>.md`, summarize its phases/task counts + any setup updates made in step 6, and **stop**. Do not implement theme code.
