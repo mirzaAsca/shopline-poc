@@ -113,6 +113,31 @@ Common content-bearing settings (useful for migration injection):
 
 Reusable partials/helpers (not directly placed by merchants): `icons`, `media`, `image.html`, `breadcrumb`, `pagination`, `facets`, `cart`, `product`, `customers`, `input`, `share-button`, `social-medias.html`, `meta-tags.html`, `page-head.html`, `stylesheet.html`, `script.html`, `theme-css-var.html`, `tips-card`.
 
+## Setting-type vocabulary (extracted from the real Bottle schemas)
+
+Every `settings` entry in a section/block `{{#schema}}` has a `type`. These are the actual types used across Bottle's `sections/` + `blocks/` (counts = occurrences) — the fields a migration writes into.
+
+**Content/value fields (inject scraped content here):**
+| `type` | Holds | Migration use |
+|---|---|---|
+| `text` | single-line string | headings, labels |
+| `textarea` | multi-line plain text | short copy |
+| `richtext` | HTML rich text | body copy (e.g. rich-text block `content`) |
+| `image` | image picker (asset/url) | images → `public/images` refs |
+| `url` | a link | buttons, nav, cards |
+| `select` | enumerated choice | layout/variant options |
+| `switch` | boolean | toggles |
+| `range` | numeric slider | sizes, counts, spacing values |
+| `color` | a single color | accents |
+| `color_scheme` | reference to a scheme in `theme.config.json` | section theming |
+| `text_align` | alignment | layout |
+| `style.spacing` / `style.size` / `style.layout` | layout/style objects | per-section spacing & layout |
+
+**Reference/object fields (point at store data or sub-structures):**
+`collection`, `product`, `blog`, `page`, `menu` (resource pickers), `video` / `external_video`, `payment_icon` (+ specific brand icons like `visa`, `jcb`, `paypal`, `union_pay`…), `group` / `group_header` (settings grouping), `dividing_line`, `sline` (raw Sline).
+
+> Inside a section's `{{#schema}}`, allowed child blocks are declared under `blocks` (each may carry a `limit`, e.g. `heading` limit 1), and `presets` provide default-populated instances. Referencing a section by `{ "type": … }` alone uses its preset.
+
 ## Global theme settings (`theme.schema.json` → `theme.config.json`)
 
 `theme.schema.json` defines global setting groups; `theme.config.json` holds the active **preset** values (`current: "Default"`). These drive the whole look — the redesign knobs.
@@ -121,6 +146,24 @@ Setting groups (with approx. # of settings):
 `component_color` (14), `font` (11), `layout` (6), `button` (9), `sku` (9), `input` (9), `product_card` (18), `collection_card` (11), `blog_card` (11), `other_card` (9), `dropdown_menu` (9), `drawer` (8), `cart` (2), `media_sosial` (32), `favicon` (1).
 
 **Color schemes** live under `theme.config.json → presets.Default.theme.color_schemes` (`scheme-1`…`scheme-4`), each defining `color_background`, `color_text`, `color_button_*`, `color_card_background`, etc. Sections reference a scheme via a `color_scheme` setting. → For a **redesign**, edit these schemes + `font`/`layout` groups; for **1:1**, derive scheme colors from the scraped source palette.
+
+## Where storefront content actually lives (content-source model)
+
+Critical for migration accuracy — a rendered value can come from any of these layers, in increasing priority:
+
+1. **Schema `default`** — in the section/block `.html` `{{#schema}}`. Shows **only when nothing overrides it**. *(Verified: the footer copyright `default` rendered because no stored value existed.)*
+2. **Template JSON** — `templates/*.json` `settings`/`blocks`. **This is where the migration writes per-page content.**
+3. **Section-group config** — `sections/header-group.json`, `sections/footer-group.json` (global header/footer composition + content).
+4. **Theme config preset** — `theme.config.json` (`presets.Default…`): global settings (colors, fonts) and current-preset section settings.
+5. **Merchant-set values** — entered in the theme editor, stored server-side; they materialize into the template/config files on `sl theme pull`.
+
+→ A migration injects content into **(2) templates** (and **(4) theme.config** for global look), and relies on **(1) defaults** for fields it leaves unset.
+
+## i18n / translations
+
+- `i18n/<locale>.json` — **storefront-facing strings** (what visitors see).
+- `i18n/<locale>.schema.json` — **editor UI labels**; schemas reference them via `t:` keys, e.g. `"name": "t:sections.footer.blocks.copyright.name"`.
+- ~40 locales ship with Bottle. For the **"carry all source languages"** decision ([07](07-migration-blueprint.md)), the migrator populates `i18n/<locale>.json` per source locale; `t:` keys in section schemas stay as-is.
 
 ## How a page renders (mental model)
 

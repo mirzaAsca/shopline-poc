@@ -16,8 +16,9 @@ The end goal: an agent is given a source website URL, scans its navigation / pag
 | [04-bottle-theme-architecture.md](04-bottle-theme-architecture.md) | OS 3.0 / Sline structure; **full sections + blocks + templates catalog**; the content model migration maps onto |
 | [05-pages-and-templates.md](05-pages-and-templates.md) | Page **templates** via CLI vs page **records** via Admin API; `template_suffix`; `create-page.sh` |
 | [06-deploy-publish-validate.md](06-deploy-publish-validate.md) | Push → publish (status swap) → validate via isolated Chrome + CDP |
-| [07-migration-blueprint.md](07-migration-blueprint.md) | Intended end-to-end pipeline; source-scrape → Bottle mapping; open questions |
+| [07-migration-blueprint.md](07-migration-blueprint.md) | End-to-end pipeline; **locked v1 decisions**; source-scrape → Bottle mapping; risks |
 | [08-troubleshooting.md](08-troubleshooting.md) | Consolidated catalog of every gotcha + fix |
+| [09-validation-status.md](09-validation-status.md) | **What's proven vs. doc-derived** — trust calibration for the agent |
 
 ## The five things that will bite you (TL;DR)
 

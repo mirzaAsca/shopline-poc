@@ -72,6 +72,8 @@ Admin → Online Store → Pages → *Add page* → set title → **Theme templa
 
 ### B) Admin REST API (terminal, automatable) ✅ preferred for the pipeline
 
+> ⚠️ **Validation status:** the endpoint pattern + auth below are confirmed from SHOPLINE docs and a verified **sibling** endpoint (`store/blogs.json`), but the *pages* create call itself was **not executed during the POC** (the POC page was made in the admin UI). [`scripts/create-page.sh`](../scripts/create-page.sh) is therefore **untested end-to-end** — verify the first real run. See [09-validation-status](09-validation-status.md).
+
 ```
 POST https://${SL_STORE}/admin/openapi/${SL_API_VERSION}/pages.json
 Authorization: Bearer ${SL_TOKEN}

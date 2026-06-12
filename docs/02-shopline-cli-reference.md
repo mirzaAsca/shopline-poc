@@ -66,6 +66,20 @@ sl theme list   # confirm [live] moved to your theme
 ```
 `status: 1` = Published, `0` = Unpublished, `-1` = Delete. This is a **pointer swap** — the previously-live theme becomes `[unpublished]` (intact, reversible). See [06](06-deploy-publish-validate.md) and [08](08-troubleshooting.md#publish-flag-is-a-no-op).
 
+## Advanced — reusing the CLI's authenticated API module
+
+The publish trick above is one case of a general, **validated** technique: `require()` the installed CLI's compiled API module and call its functions directly — they reuse the CLI's stored session (cookies + `dfp-token` from `~/.config/configstore/shopline.json`), so **no extra token is needed**.
+
+```bash
+node -e "const api=require('$(npm root -g)/@shoplineos/cli/dist/services/theme/api.js'); \
+  api.getThemeListWithPagination().then(r=>console.log(JSON.stringify(r.data))).catch(e=>console.error(e.message))"
+```
+
+Exports available on that module (only `changeThemeStatus` is **verified** here — the rest are present but unverified, see [09](09-validation-status.md)):
+`changeThemeStatus`, `createFile`, `updateFile`, `uploadFile`, `getThemeFileDetail`, `getThemeInfo`, `getThemeListWithPagination`, `downloadThemePackage`, `getPublishedThemeInstance`, `uploadThemePackageFile`, `uploadPrivateThemePackage`, `createNewThemeOrCompleteUpload`.
+
+> ⚠️ **Internal/undocumented.** This bypasses the public CLI surface and can break on any `@shoplineos/cli` update. Use it only for what `sl` lacks (currently: publish); prefer official commands otherwise. Base URLs the module talks to: `${store}/admin/api/site/theme` (theme ops) and `${store}/admin/api/merchant-bff`. These are **not** the Admin OpenAPI ([05](05-pages-and-templates.md)).
+
 ## What the CLI session can and cannot do
 
 | Can (theme files) | Cannot (store data) |
