@@ -25,6 +25,6 @@ Before building, **search the codebase with parallel subagents** to confirm the 
 
 ## 6. Close the loop
 - Tick the task `[x]` in its `specs/*.md` file; record any non-obvious **decision + why** in that spec's Decision log.
-- **Append** anything you learned (a gotcha, a wrong instruction, a fix) to `LEARNINGS.md` — never overwrite, only append.
+- **Append** what you learned to `LEARNINGS.md` per its header rubric (journal it; also fix `docs/` / `validation-status.md` if it's a durable correction) — never overwrite, only append.
 - Update `CLAUDE.md`/`docs/*` only if you discovered the guidance itself was wrong.
 - **Commit** with a detailed message and **push**. Then **stop** (the next loop is a fresh context).

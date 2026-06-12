@@ -1,6 +1,15 @@
 # LEARNINGS (append-only)
 
-> The running log of things discovered while working — gotchas, surprises, and **bugs found in our own instructions** (`CLAUDE.md`/`docs/*`). Every loop reads this; every loop that learns something **appends** to it (never overwrite, never delete). When a learning means the docs are wrong, fix the doc *and* note it here.
+> The append-only **journal of what we learned**, in time order. **Read it every loop.**
+>
+> **Write an entry when** you learn something non-obvious: a gotcha/surprise, a **bug in our own instructions** (`CLAUDE.md`/`docs/*`), a resolved SHOPLINE issue (+ the official doc link, per the docs-first rule), or a dead-end worth remembering. Append only — never overwrite or delete.
+>
+> **Route the durable part to its real home too** — LEARNINGS is the diary, *not* the source of truth for any topic:
+> - it corrects/extends guidance → **also fix `docs/`**
+> - a capability proven/disproven → **also update `docs/validation-status.md`**
+> - a per-project choice → **the active spec's Decision log**
+>
+> **Don't log:** routine task completion, things already correctly documented, or concrete per-project values (those go in `.env`).
 >
 > Format: `## YYYY-MM-DD — <short title>` then **What / Why it matters / Action taken (doc fixed?)**.
 
