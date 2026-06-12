@@ -26,7 +26,7 @@ Spawn **parallel subagents** to fan out; the Chrome DevTools MCP renders JS-heav
 For each source block, choose a stock Bottle section where one fits, else **plan a new custom section** (never `custom-html`). Use the cheat-sheet in `docs/ops/theme-architecture.md`. Each page → a template (`index.json` or a new `page.<handle>.json`).
 
 ## 4. Interview the user to resolve unknowns (iterate — don't guess)
-Planning ≠ guessing. Whenever something is ambiguous or consequential, **interview the user in focused cycles** (a few questions at a time), fold the answers into the plan, and **repeat across as many cycles as needed** until the plan is unambiguous. Probe every relevant aspect, e.g.:
+Planning ≠ guessing. Whenever something is ambiguous or consequential, **interview the user in focused cycles** (a few questions at a time), fold the answers into the plan, and **repeat across as many cycles as needed** until the plan is unambiguous. **Only ask what you genuinely can't resolve yourself — never ask obvious or logically-derivable things;** infer from the source, the docs, and sensible defaults, and reserve questions for real ambiguity or decisions only the user can make. Probe every relevant aspect, e.g.:
 - **UX / UI:** fidelity (pixel-close vs adapted), layout, interactions & animations, hover/active/focus states, responsive behavior per breakpoint, which source design is canonical (e.g. v1 vs v2), empty/error states.
 - **Content & IA:** which pages/routes are in scope, navigation structure, copy/assets provided vs to-scrape, locales, SEO/handles to preserve.
 - **Logic & behavior:** forms, dynamic/JS-driven widgets, filtering/search, third-party embeds, theme-vs-app boundaries, anything interactive.
@@ -43,7 +43,7 @@ Pick a **descriptive filename** (`specs/<NN>-<type>-<slug>.md`, increasing `NN`)
 - An **Assets register** (provided vs to-scrape) and a **Decision log** section.
 
 ## 6. Final cycle — feed findings back into the reusable setup
-Once everything is gathered and the spec is complete (possibly after several interview cycles), **interview the user ONE last time**: ask whether any findings/decisions from this planning are worth **baking into the reusable setup** so *future* migrations benefit. For each item the user confirms, update its **proper home — in this order of preference** (most reusable first):
+Once everything is gathered and the spec is complete (possibly after several interview cycles), **interview the user ONE last time**: ask whether **any finding at all from the whole planning process** — analysis, the interviews, surprises, dead-ends, gotchas (not only interview answers) — is worth **baking into the reusable setup** so *future* migrations benefit. Surface only the **non-obvious** ones worth keeping; don't raise trivial or self-evident things. For each item the user confirms, update its **proper home — in this order of preference** (most reusable first):
 1. **`.claude/`** (rules / commands) — an always-on guardrail or workflow step.
 2. **`docs/`** (principles / craft / ops / runbooks) — durable, reusable guidance.
 3. **`CLAUDE.md`** — only top-level routes / non-negotiables.
