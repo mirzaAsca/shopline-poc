@@ -74,19 +74,44 @@ So a page record can only be created two ways, **both using the admin login sess
 ### A) Admin UI (manual, reliable)
 Admin → Online Store → Pages → *Add page* → set title → **Theme template: `<suffix>`** → Save. Then `/pages/<suffix>` renders. This is the **verified** path; only the page record needs it — the template (Step 1) is 100% CLI.
 
-### B) Automate the internal admin API via CDP (capture-and-replay)
-The Admin UI's "Add page" form POSTs to SHOPLINE's **internal** admin API (session/cookie-authed). To automate page creation without clicking:
-1. Log into the admin in the isolated Chrome ([deploy-publish-validate.md](deploy-publish-validate.md) — same CDP setup).
-2. With CDP network capture on, add a page once (or watch the request) → capture the exact internal endpoint + payload + cookies.
-3. Replay that request in a script for subsequent pages (same pattern as the publish `changeThemeStatus` trick — using a session you already hold, not a public API).
+### B) Internal admin API — ✅ VERIFIED WORKING (the automated path)
+Captured from the Admin UI on 2026-06-12 and confirmed by creating pages programmatically. Endpoint (session/cookie-authed, **not** the public OpenAPI):
 
-> This is the only automatable route. It depends on an admin session and an internal endpoint that is **undocumented and may change** — treat as ⚠️ and keep a UI fallback. (Runbook/script: TODO once captured.)
+```
+POST https://${SL_STORE}/admin/api/site/page/customize
+content-type: application/json     (auth = admin session cookies)
+
+{ "name":        { "default": "About Us" },     // title
+  "handle":      "about-us",
+  "customizePath": "/pages/about-us",
+  "templateName": "templates/page.about-us.json", // ← ATTACHES the theme template
+  "templateType": 0,
+  "status": 1,                                    // 1 = published
+  "publishTime": <epoch ms>,
+  "seo": { "title": "About Us", "desc": "", "handleList": ["about-us"] },
+  "seoTitle": { "default": "About Us" }, "seoTitleV2": "About Us",
+  "seoDesc": { "default": "" }, "seoKeyword": {}, "seoStatus": 1,
+  "coverResourceId": "", "htmlConfig": "", "sourcePath": null, "customUrl": null, "sourceCustomPath": null }
+```
+Success → `{"code":"SUCCESS","data":{"id":"…","customizePath":"/pages/about-us"},"success":true}`.
+
+- **`templateName`** is the attach mechanism: `templates/page.<suffix>.json` (default = `templates/page.json`). This is "create page + attach template" in one call.
+- Page **content** comes from the attached template's sections (no `body_html` field needed) — exactly our template-driven model.
+
+**Reusable script (committed):** [`scripts/create-page.mjs`](../../scripts/create-page.mjs). It runs the POST inside a **logged-in admin tab** in the isolated Chrome (so the browser supplies the session cookies):
+```bash
+# prereq: isolated Chrome on CDP port 9334 with the admin logged in (docs/ops/deploy-publish-validate.md)
+node scripts/create-page.mjs "About Us" about-us about-us 9334   # title, handle, template-suffix, port
+node scripts/create-page.mjs "FAQ" faq                           # default template
+```
+
+> ⚠️ Internal/undocumented endpoint — could change with SHOPLINE updates; keep the UI (A) as fallback. Auth is the admin **session**, not the app token. (Future: replay with the CLI's stored cookies+dfp-token to drop the browser dependency — same idea as the publish `changeThemeStatus` trick.)
 
 ## Migration implication
 
 For each source page that becomes a standalone SHOPLINE page:
-1. Build/choose a `page.<handle>.json` template (CLI push) — fully automated.
-2. Mint the page record + attach the template (`template_suffix = <handle>`) via **A** (UI) or **B** (captured internal API).
+1. Build/push a `page.<handle>.json` template (CLI) — fully automated.
+2. `node scripts/create-page.mjs "<Title>" <handle> <handle>` → mints the page record **and** attaches the template.
 3. Validate ([06](deploy-publish-validate.md)).
 
 What the **public Admin API DOES** support (verified — Bearer app token works): blogs (`/store/blogs.json`), products (`/products/products.json`), collections, script tags, customers, discounts (full list = the 96 GraphQL mutations). So blog posts/products/collections for a migration ARE API-creatable — only standalone **pages** are not.

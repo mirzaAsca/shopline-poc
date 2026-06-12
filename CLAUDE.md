@@ -47,5 +47,5 @@ Full rules in `docs/principles/agent-workflow.md`. **Append every discovery/gotc
 4. Image setting type = `image` (not `image_picker`); resolve with `image_url()`.
 5. Every merchant-addable section: `color_scheme` setting + `style.layout/spacing/size` with `@media (--mobile)`, rendered via `class_list()`.
 6. Brand-neutral names everywhere; merchant copy only in editable content.
-7. A template ≠ a page route — page records are NOT in SHOPLINE's public Admin API (verified); create them via Admin UI or the internal session API (`docs/ops/pages-and-records.md`).
+7. A template ≠ a page route. No public page API — create page records with `scripts/create-page.mjs` (internal API `…/site/page/customize`; `templateName` attaches the template) or the Admin UI (`docs/ops/pages-and-records.md`).
 8. Publish = status-swap API (`sl theme push -p` is a no-op).

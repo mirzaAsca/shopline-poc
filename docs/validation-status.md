@@ -51,7 +51,7 @@ The publish workaround works by `require()`-ing the installed CLI's compiled mod
 | `docs/ops/*` (CLI, deploy, publish, pages, architecture) | ✅ mostly verified this POC (exceptions listed above) |
 | `docs/craft/*` (syntax, components, schemas, color, responsive, assets) | ⚠️ inherited from prior builds — sound, but not re-executed here; cross-check against this repo's theme when in doubt |
 | `docs/principles/migration-decisions.md` | locked decisions (not a testable claim) |
-| Admin API page-create + `scripts/create-page.sh` | ❌ **DISPROVEN 2026-06-12** — no `pages` resource in SHOPLINE's public REST *or* GraphQL Admin API (full schema introspected). Pages = Admin UI / internal session API only. Script deprecated. |
+| Page creation | ✅ **VERIFIED 2026-06-12** — created pages programmatically via the **internal** admin API `POST /admin/api/site/page/customize` ([`scripts/create-page.mjs`](ops/pages-and-records.md)); template attached via `templateName`. NOTE: the *public* REST+GraphQL Admin API has **no** page resource (disproven by full schema introspection); old `create-page.sh` deleted. |
 | Menus / redirects Admin API | ⚠️ assumed, unconfirmed |
 | `sl theme serve` / `package` / `check` / `console` | ⚠️ documented from `--help`, not exercised |
 
