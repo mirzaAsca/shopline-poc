@@ -35,7 +35,7 @@ sl theme list
 ## GitHub
 
 - `${GH_REPO}` holds the theme + `docs/` + `scripts/`.
-- Pure version control — **no native GitHub→SHOPLINE auto-deploy** exists. Deploy is always `sl theme push`.
+- SHOPLINE **has** a native GitHub theme integration (Add theme → Add from GitHub) — but it needs a **pure-theme repo** (theme files only at root). This hybrid repo (theme + agent infra) is rejected (`InvalidFilePath`), so deploy it via `sl theme push`; reserve the GitHub connection for a theme-only repo/branch.
 - Optional future automation: a CI job (GitHub Action) that runs `sl theme push` on merge to `main`, using a stored CLI token. (Not set up yet.)
 
 ## Rollback

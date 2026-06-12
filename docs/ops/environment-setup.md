@@ -56,7 +56,7 @@ Copy `.env.example` → `.env`, fill it, and `set -a; . ./.env; set +a` (or use 
 
 ## Git / GitHub
 
-The theme is version-controlled. GitHub is **not** an auto-deploy source for SHOPLINE (there is no native GitHub→theme sync like Shopify) — it is purely version control. Deploys always go through `sl theme push` ([06](deploy-publish-validate.md)).
+SHOPLINE **does** have a native GitHub theme integration — admin **Theme library → Add theme → Add from GitHub** connects a repo/branch and syncs it (like Shopify). **BUT it requires a PURE theme repo** (only valid theme dirs at the root: `blocks/ components/ i18n/ layout/ public/ sections/ templates/` + `theme.config.json`/`theme.schema.json`). A **hybrid repo** like this one — theme **plus** `CLAUDE.md`, `docs/`, `prompts/`, `scripts/`, `external/`, `.claude/` — is **rejected**: every non-theme file errors with `InvalidFilePath: invalid file path`. So for this template repo, deploy via **`sl theme push`**; only use the GitHub connection against a **theme-only repo or branch**. (`.gitignore` does NOT fix this — already-tracked files stay on GitHub; you'd have to `git rm` them, deleting the infra.)
 
 ```bash
 git init && git checkout -b main
