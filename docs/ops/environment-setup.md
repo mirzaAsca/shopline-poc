@@ -58,6 +58,12 @@ Copy `.env.example` → `.env`, fill it, and `set -a; . ./.env; set +a` (or use 
 
 SHOPLINE **does** have a native GitHub theme integration — admin **Theme library → Add theme → Add from GitHub** connects a repo/branch and syncs it (like Shopify). **BUT it requires a PURE theme repo** (only valid theme dirs at the root: `blocks/ components/ i18n/ layout/ public/ sections/ templates/` + `theme.config.json`/`theme.schema.json`). A **hybrid repo** like this one — theme **plus** `CLAUDE.md`, `docs/`, `prompts/`, `scripts/`, `external/`, `.claude/` — is **rejected**: every non-theme file errors with `InvalidFilePath: invalid file path`. So for this template repo, deploy via **`sl theme push`**; only use the GitHub connection against a **theme-only repo or branch**. (`.gitignore` does NOT fix this — already-tracked files stay on GitHub; you'd have to `git rm` them, deleting the infra.)
 
+### Connecting SHOPLINE via GitHub (the `shopline-theme` branch)
+We keep a dedicated **theme-only branch `shopline-theme`** (only the theme dirs — no infra, no `.gitignore`, no `.env`) that SHOPLINE connects to; `main` stays the full project.
+1. Push the latest theme to it: **`scripts/sync-theme-branch.sh`** (copies *only* the theme paths from `main` → `shopline-theme`; never `git add -A`, so `.env` can't leak).
+2. In the admin: **Theme library → Add theme → Add from GitHub** → pick this repo → branch **`shopline-theme`**.
+> **`main` is the source of truth.** Edit the theme locally and run the sync script. If you edit in the SHOPLINE admin, SHOPLINE commits back to `shopline-theme` — pull that into `main` before the next sync or it gets overwritten. ⚠️ Never put any non-theme file (or `.gitignore`) on `shopline-theme` — the import will reject it.
+
 ```bash
 git init && git checkout -b main
 git add -A && git commit -m "Initial: Bottle theme"
