@@ -10,7 +10,7 @@
 ## Scope (v1)
 - **Static pages + content only** — home, about, FAQ, contact, marketing, nav, footer, brand styling. **No commerce** (products/collections/cart) yet.
 - **Source platforms:** Shopify, WooCommerce/WordPress, Wix/Squarespace, custom/static HTML — **one extractor per platform** (Wix/Squarespace need rendered-DOM scraping). *(Source-side extraction is a separate workstream, not specified here.)*
-- **Assets:** pre-hosted on SHOPLINE under `public/images` (provided in the working theme). v1 does **not** scrape/re-upload media — reference those paths.
+- **Assets: provided-first, else scrape.** Use `public/images` if present; if an asset is missing, **scrape it from the source** (DOM / Chrome DevTools MCP) into `public/images` and reference via `asset_url()` ([../runbooks/scrape-assets.md](../runbooks/scrape-assets.md)).
 - **Localization:** carry over **all** source languages into `i18n/<locale>.json`.
 - **SEO/URLs:** preserve handles + 301 redirects + meta (title/description/og).
 - **Navigation:** recreate as SHOPLINE store menus (Admin) + wire the Bottle `header`. *(Menu API unconfirmed — see [validation-status](../validation-status.md).)*

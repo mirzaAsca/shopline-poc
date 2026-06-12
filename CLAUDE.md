@@ -6,7 +6,14 @@ You build **productized, modular** SHOPLINE **Bottle** themes (Sline engine — 
 
 **Before anything unattended (e.g. auto-publish):** check `docs/validation-status.md` — ⚠️ items are unverified.
 
+## Workflow — two phases (Ralph loop)
+1. **Plan** — `/plan-migration <source-url> [1:1|redesign]` → analyze the source, write a new checkbox spec in `specs/`. No code. (`prompts/PLAN.md`)
+2. **Implement** — `/implement-next` → **one task per fresh context**: pick the most important unchecked task from the active `specs/*.md`, build it, write + run `tests/*.test.js`, run the desktop+mobile visual diff, tick the box, append to `LEARNINGS.md`, commit + push. Repeat. (`prompts/PROMPT.md`)
+
+Full rules in `docs/principles/agent-workflow.md`. **Append every discovery/gotcha to `LEARNINGS.md`** (append-only).
+
 ## Read BEFORE any work (principles)
+- `docs/principles/agent-workflow.md` — the two-phase loop, subagents (research only), don't-assume-search-first, tests as back-pressure
 - `docs/principles/implementation-principles.md` — reusability, brand-neutral, theme-vs-apps, PDP safety
 - `docs/principles/migration-decisions.md` — the locked v1 decisions (authoritative)
 
@@ -20,8 +27,12 @@ You build **productized, modular** SHOPLINE **Bottle** themes (Sline engine — 
 | Deploy / publish / validate | `docs/ops/deploy-publish-validate.md` |
 | Create a page route | `docs/ops/pages-and-records.md` |
 | Store/theme setup | `docs/ops/environment-setup.md`, `docs/ops/store-and-theme-config.md` |
+| Plan a migration (write the spec) | `prompts/PLAN.md`, `docs/spec-template.md`, `specs/README.md` |
 | Migrate a whole page | `docs/runbooks/migrate-a-page.md` |
 | Build one section | `docs/runbooks/build-a-section.md` |
+| Visual QA (side-by-side, desktop+mobile) | `docs/runbooks/visual-qa.md` |
+| Assets (provided-first, else scrape) | `docs/runbooks/scrape-assets.md` |
+| Write / run tests | `docs/runbooks/testing.md` |
 | Audit a theme | `docs/runbooks/audit-a-theme.md` |
 | Debug | `docs/troubleshooting.md` + `docs/validation-status.md` |
 

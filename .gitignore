@@ -9,3 +9,11 @@ node_modules/
 # Secrets — never commit real values (use .env.example as the template)
 .env
 .env.local
+
+# Live view of agent memory (symlink, not committed)
+/agent-memory
+
+# Visual-diff harness output + test artifacts
+scripts/visual-diff/out/
+test-results/
+playwright-report/
