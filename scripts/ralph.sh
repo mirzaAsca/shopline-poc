@@ -18,7 +18,7 @@
 #
 # UNATTENDED PERMISSIONS: a Ralph loop cannot answer permission prompts. Before an
 # unattended run, set a non-interactive mode — ONLY in a sandbox/VM + dedicated repo:
-#   export CLAUDE_FLAGS="-p --output-format json --dangerously-skip-permissions"
+#   export CLAUDE_FLAGS="-p --output-format stream-json --verbose --dangerously-skip-permissions"
 
 set -uo pipefail
 
@@ -29,13 +29,14 @@ NO_PROGRESS_MAX="${RALPH_NO_PROGRESS:-3}"
 PROMPT_FILE="${RALPH_PROMPT:-prompts/PROMPT.md}"
 SPEC_GLOB="${RALPH_SPEC_GLOB:-specs/*.md}"
 CLAUDE_BIN="${CLAUDE_BIN:-claude}"
-CLAUDE_FLAGS="${CLAUDE_FLAGS:--p --output-format json}"
+CLAUDE_FLAGS="${CLAUDE_FLAGS:--p --output-format stream-json --verbose}"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT" || exit 2
 mkdir -p .ralph
 
-log() { printf '[ralph %s] %s\n' "$(date +%H:%M:%S)" "$*"; }
+ESC=$'\033'; C_INFO="${ESC}[36m"; C_OK="${ESC}[32m"; C_WARN="${ESC}[33m"; C_OFF="${ESC}[0m"
+log() { printf '%s[ralph %s]%s %s\n' "$C_INFO" "$(date +%H:%M:%S)" "$C_OFF" "$*"; }
 
 # count unchecked checkboxes across the spec files (the "work remaining" signal)
 open_tasks() {
@@ -80,14 +81,21 @@ while :; do
 
   # --- run ONE fresh-context iteration ---
   head_before="$(git rev-parse HEAD 2>/dev/null || echo none)"
-  out=".ralph/iter-${iter}.json"
-  log "running agent (fresh context)…"
-  # A plain `claude -p` invocation starts a NEW session => fresh context per loop.
-  "$CLAUDE_BIN" $CLAUDE_FLAGS < "$PROMPT_FILE" > "$out" 2>>.ralph/ralph.err \
-    || log "agent exited non-zero (see .ralph/ralph.err)"
+  out=".ralph/iter-${iter}.jsonl"
+  log "running agent (fresh context) — live output below:"
+  # Fresh session per loop. Stream the agent's actions through the formatter (readable +
+  # colored) and tee the raw stream to $out for cost parsing. Falls back to raw if the
+  # formatter is absent (e.g. the self-test scratch repo).
+  if [ -f "$ROOT/scripts/ralph-format.mjs" ]; then
+    "$CLAUDE_BIN" $CLAUDE_FLAGS < "$PROMPT_FILE" 2>>.ralph/ralph.err | tee "$out" | node "$ROOT/scripts/ralph-format.mjs" \
+      || log "${C_WARN}agent stream ended non-zero${C_OFF} (see .ralph/ralph.err)"
+  else
+    "$CLAUDE_BIN" $CLAUDE_FLAGS < "$PROMPT_FILE" > "$out" 2>>.ralph/ralph.err \
+      || log "agent exited non-zero (see .ralph/ralph.err)"
+  fi
 
-  # accumulate cost from the result JSON (total_cost_usd), if present
-  cost="$(node -e 'try{const o=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));process.stdout.write(String(o.total_cost_usd??0))}catch(e){process.stdout.write("0")}' "$out" 2>/dev/null || echo 0)"
+  # accumulate cost: scan the NDJSON stream for the last total_cost_usd (also works for json mode)
+  cost="$(node -e 'const fs=require("fs");let c=0;try{for(const l of fs.readFileSync(process.argv[1],"utf8").split("\n")){if(!l.trim())continue;try{const o=JSON.parse(l);if(o.total_cost_usd!=null)c=o.total_cost_usd}catch(e){}}}catch(e){}process.stdout.write(String(c))' "$out" 2>/dev/null || echo 0)"
   spent="$(awk "BEGIN{printf \"%.4f\", $spent + $cost}")"
 
   # --- progress detection: did a new commit land this loop? ---
@@ -97,7 +105,8 @@ while :; do
     log "no new commit this loop (no-progress ${no_progress}/${NO_PROGRESS_MAX})"
   else
     no_progress=0
-    log "progress: new commit ${head_after:0:9} (+\$$cost, total \$$spent)"
+    log "${C_OK}progress: new commit ${head_after:0:9}${C_OFF} (+\$$cost, total \$$spent) — diff:"
+    git -c color.ui=always show "$head_after" 2>/dev/null | sed 's/^/    /' | head -200
     # mirror to the GitHub-connect branch = the LIVE theme. OFF by default so dev builds
     # stay on the unpublished preview target; set RALPH_SYNC_LIVE=1 for a go-live run.
     if [ "${RALPH_SYNC_LIVE:-0}" = "1" ] && [ -x scripts/sync-theme-branch.sh ]; then
