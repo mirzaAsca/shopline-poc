@@ -20,6 +20,8 @@
 | 5 | **Stuck** — no new commit for `RALPH_NO_PROGRESS` loops (default 3) | stop + escalate (circuit-breaker) | `6` |
 
 > The `- [ ]` count hitting **0 is the natural terminator** — our specs are all-checkbox by design, so "out of work" is unambiguous and machine-checkable. No more open boxes ⇒ the migration unit is finished.
+>
+> *All five exits are regression-tested by `scripts/ralph-selftest.sh`, which drives the loop against a stub agent in a throwaway repo (no real repo/network touched) and asserts each stop.*
 
 ## When to recycle context (and when NOT to chase a usage %)
 Recycle at the **task boundary** — one task per fresh context. Do **not** keep one conversation running toward ~90% / compaction to "save" reloads: that maximizes the degradation Ralph is built to avoid, and context-fill % isn't reliably measurable anyway (the model can't introspect it mid-run; `/context` is visual-only; headless JSON exposes *cost*, not *fill %*). To cut per-loop overhead, keep each task's context **small** — delegate research to **parallel subagents** — rather than stuffing one context full. Treat `--max-turns` / budget as **ceilings that stop a run**, not targets to creep toward.
