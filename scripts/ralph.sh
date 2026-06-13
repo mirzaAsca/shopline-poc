@@ -30,6 +30,7 @@ PROMPT_FILE="${RALPH_PROMPT:-prompts/PROMPT.md}"
 SPEC_GLOB="${RALPH_SPEC_GLOB:-specs/*.md}"
 CLAUDE_BIN="${CLAUDE_BIN:-claude}"
 CLAUDE_FLAGS="${CLAUDE_FLAGS:--p --output-format stream-json --verbose}"
+MODEL="${RALPH_MODEL:-claude-opus-4-8}"            # pin the loop's model (Opus 4.8)
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT" || exit 2
@@ -51,7 +52,7 @@ command -v "$CLAUDE_BIN" >/dev/null 2>&1 || { log "ERROR: '$CLAUDE_BIN' not on P
 compgen -G $SPEC_GLOB >/dev/null 2>&1 || { log "ERROR: no specs match '$SPEC_GLOB' — run /plan-migration first"; exit 2; }
 
 log "start | max_iter=$MAX_ITERATIONS budget=\$$MAX_BUDGET_USD no_progress_max=$NO_PROGRESS_MAX"
-log "prompt=$PROMPT_FILE specs='$SPEC_GLOB' agent='$CLAUDE_BIN $CLAUDE_FLAGS'"
+log "prompt=$PROMPT_FILE specs='$SPEC_GLOB' model=$MODEL agent='$CLAUDE_BIN $CLAUDE_FLAGS'"
 
 spent=0
 no_progress=0
@@ -87,10 +88,10 @@ while :; do
   # colored) and tee the raw stream to $out for cost parsing. Falls back to raw if the
   # formatter is absent (e.g. the self-test scratch repo).
   if [ -f "$ROOT/scripts/ralph-format.mjs" ]; then
-    "$CLAUDE_BIN" $CLAUDE_FLAGS < "$PROMPT_FILE" 2>>.ralph/ralph.err | tee "$out" | node "$ROOT/scripts/ralph-format.mjs" \
+    "$CLAUDE_BIN" $CLAUDE_FLAGS --model "$MODEL" < "$PROMPT_FILE" 2>>.ralph/ralph.err | tee "$out" | node "$ROOT/scripts/ralph-format.mjs" \
       || log "${C_WARN}agent stream ended non-zero${C_OFF} (see .ralph/ralph.err)"
   else
-    "$CLAUDE_BIN" $CLAUDE_FLAGS < "$PROMPT_FILE" > "$out" 2>>.ralph/ralph.err \
+    "$CLAUDE_BIN" $CLAUDE_FLAGS --model "$MODEL" < "$PROMPT_FILE" > "$out" 2>>.ralph/ralph.err \
       || log "agent exited non-zero (see .ralph/ralph.err)"
   fi
 
