@@ -98,10 +98,12 @@ while :; do
   else
     no_progress=0
     log "progress: new commit ${head_after:0:9} (+\$$cost, total \$$spent)"
-    # mirror the theme to the GitHub-connect branch (deterministic backstop; the task also
-    # does this per PROMPT.md §6). Idempotent — a no-op when shopline-theme already matches.
-    if [ -x scripts/sync-theme-branch.sh ]; then
-      if scripts/sync-theme-branch.sh >>.ralph/ralph.err 2>&1; then log "mirrored theme -> shopline-theme"; else log "WARN: shopline-theme sync failed (see .ralph/ralph.err)"; fi
+    # mirror to the GitHub-connect branch = the LIVE theme. OFF by default so dev builds
+    # stay on the unpublished preview target; set RALPH_SYNC_LIVE=1 for a go-live run.
+    if [ "${RALPH_SYNC_LIVE:-0}" = "1" ] && [ -x scripts/sync-theme-branch.sh ]; then
+      if scripts/sync-theme-branch.sh >>.ralph/ralph.err 2>&1; then log "mirrored theme -> shopline-theme (LIVE)"; else log "WARN: shopline-theme sync failed (see .ralph/ralph.err)"; fi
+    else
+      log "live-sync skipped (RALPH_SYNC_LIVE!=1) — building on the preview target only"
     fi
   fi
 done
