@@ -23,3 +23,13 @@ An agent that screenshots the original, then later the new page, must *remember*
 Per the locked decision ([../principles/migration-decisions.md](../principles/migration-decisions.md)): pixel-diff score under threshold **and** agent visual review confirms identity, **at desktop and mobile**. Auto-publish targets are fresh stores, so this gate is the report a human relies on for final live QA.
 
 > Capture/diff requires identical-ish dimensions; `compare.mjs` normalizes width and pads height. Fonts/anti-aliasing cause noise — use the agent's visual review to overrule trivial score noise, and the score to catch what the eye misses.
+
+## Planned enhancements (deferred — build when the trigger fires, not before)
+`inspect.mjs` is intentionally minimal today. Two upgrades are **scoped but not built**: they can only be tuned against a *real* source→Bottle migration, so building them speculatively risks fitting the wrong shape (YAGNI). Until a trigger fires, `inspect.mjs` + the agent's review cover QA. *(Named — not "Phase 2/3" — to avoid colliding with the migration phases in [../spec-template.md](../spec-template.md).)*
+
+1. **Auto-locate (region → element matching).** Today `inspect.mjs` walks the whole DOM and matches elements by **structural path** — weakest when the source and the Bottle replica have *different* markup (the normal migration case → noisy "missing/extra"). Upgrade: map the pixel-diff's mismatched regions to elements (`elementFromPoint`) and match corresponding elements by content/role across unlike DOMs, so the report focuses on what truly broke.
+   - **Trigger:** the first real migration where path-matching yields many false "missing/extra" that are actually the same element with different markup.
+2. **Auto fix-map (delta → Bottle lever → spec tasks).** Today the agent hand-maps each delta row to a fix. Upgrade: `inspect.mjs` emits ready-to-tick spec sub-tasks (color delta → `color_scheme` var; spacing/size → `style.*`; broken img → `image_url()`/scrape; text → editable content).
+   - **Trigger:** once that delta→fix mapping repeats enough across migrations that automating it clearly saves loops.
+
+**Cheap, any time — noise reduction:** before snapshotting, freeze CSS animations/transitions, wait for `document.fonts.ready` (partly done), and dismiss known popups — to cut false-positive diffs (e.g. the email popup seen during validation). *(Prose, not `- [ ]` tasks, so the loop never auto-executes these — promote one into an active `specs/*.md` when its trigger fires.)*
