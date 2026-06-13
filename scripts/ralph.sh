@@ -35,6 +35,8 @@ MODEL="${RALPH_MODEL:-claude-opus-4-8}"            # pin the loop's model (Opus 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT" || exit 2
 mkdir -p .ralph
+RUN_ID="$(date +%Y%m%d-%H%M%S)"; RUN_DIR=".ralph/runs/$RUN_ID"; mkdir -p "$RUN_DIR"   # keep every run's logs for retro
+trap 'echo "[ralph] logs kept in $RUN_DIR — analyze + auto-improve with: scripts/ralph-retro.sh $RUN_DIR"' EXIT
 
 ESC=$'\033'; C_INFO="${ESC}[36m"; C_OK="${ESC}[32m"; C_WARN="${ESC}[33m"; C_OFF="${ESC}[0m"
 log() { printf '%s[ralph %s]%s %s\n' "$C_INFO" "$(date +%H:%M:%S)" "$C_OFF" "$*"; }
@@ -82,17 +84,17 @@ while :; do
 
   # --- run ONE fresh-context iteration ---
   head_before="$(git rev-parse HEAD 2>/dev/null || echo none)"
-  out=".ralph/iter-${iter}.jsonl"
+  out="$RUN_DIR/iter-${iter}.jsonl"
   log "running agent (fresh context) — live output below:"
   # Fresh session per loop. Stream the agent's actions through the formatter (readable +
   # colored) and tee the raw stream to $out for cost parsing. Falls back to raw if the
   # formatter is absent (e.g. the self-test scratch repo).
   if [ -f "$ROOT/scripts/ralph-format.mjs" ]; then
-    "$CLAUDE_BIN" $CLAUDE_FLAGS --model "$MODEL" < "$PROMPT_FILE" 2>>.ralph/ralph.err | tee "$out" | node "$ROOT/scripts/ralph-format.mjs" \
-      || log "${C_WARN}agent stream ended non-zero${C_OFF} (see .ralph/ralph.err)"
+    "$CLAUDE_BIN" $CLAUDE_FLAGS --model "$MODEL" < "$PROMPT_FILE" 2>>$RUN_DIR/ralph.err | tee "$out" | node "$ROOT/scripts/ralph-format.mjs" \
+      || log "${C_WARN}agent stream ended non-zero${C_OFF} (see $RUN_DIR/ralph.err)"
   else
-    "$CLAUDE_BIN" $CLAUDE_FLAGS --model "$MODEL" < "$PROMPT_FILE" > "$out" 2>>.ralph/ralph.err \
-      || log "agent exited non-zero (see .ralph/ralph.err)"
+    "$CLAUDE_BIN" $CLAUDE_FLAGS --model "$MODEL" < "$PROMPT_FILE" > "$out" 2>>$RUN_DIR/ralph.err \
+      || log "agent exited non-zero (see $RUN_DIR/ralph.err)"
   fi
 
   # accumulate cost: scan the NDJSON stream for the last total_cost_usd (also works for json mode)
@@ -111,7 +113,7 @@ while :; do
     # mirror to the GitHub-connect branch = the LIVE theme. OFF by default so dev builds
     # stay on the unpublished preview target; set RALPH_SYNC_LIVE=1 for a go-live run.
     if [ "${RALPH_SYNC_LIVE:-0}" = "1" ] && [ -x scripts/sync-theme-branch.sh ]; then
-      if scripts/sync-theme-branch.sh >>.ralph/ralph.err 2>&1; then log "mirrored theme -> shopline-theme (LIVE)"; else log "WARN: shopline-theme sync failed (see .ralph/ralph.err)"; fi
+      if scripts/sync-theme-branch.sh >>$RUN_DIR/ralph.err 2>&1; then log "mirrored theme -> shopline-theme (LIVE)"; else log "WARN: shopline-theme sync failed (see $RUN_DIR/ralph.err)"; fi
     else
       log "live-sync skipped (RALPH_SYNC_LIVE!=1) — building on the preview target only"
     fi
