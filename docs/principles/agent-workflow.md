@@ -8,6 +8,7 @@
 
 ## Rules (non-negotiable)
 - **One task per loop.** Context compaction is the enemy — do exactly one thing, then stop. The next loop starts clean.
+- **Exit is explicit.** The loop stops on a defined condition — all spec checkboxes done, a `.ralph/BLOCKED` escalation, a max-iteration/budget cap, or a no-progress circuit-breaker — never an unbounded `while :`. "Done" is decided by the **gate (tests + visual-diff)**, not the model's say-so. Rules + runner: [loop-and-exit.md](loop-and-exit.md), `scripts/ralph.sh`.
 - **Don't assume not implemented.** Before building, **search the codebase with parallel subagents**. Never assume an item is missing.
 - **Subagents = research only.** Spawn many in parallel for search/analysis. **The main agent alone** edits, builds, tests, and validates — never delegate those (single-writer keeps back-pressure honest).
 - **Full implementations, never placeholders.** Modular, brand-neutral, color-scheme + responsive + presets + i18n (see [implementation-principles.md](implementation-principles.md), `../craft/*`).

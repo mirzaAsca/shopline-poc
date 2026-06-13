@@ -20,6 +20,7 @@ Full rules in `docs/principles/agent-workflow.md`. **Log discoveries in `LEARNIN
 - `docs/principles/agent-workflow.md` — the two-phase loop, subagents (research only), don't-assume-search-first, tests as back-pressure
 - `docs/principles/implementation-principles.md` — reusability, brand-neutral, theme-vs-apps, PDP safety
 - `docs/principles/migration-decisions.md` — the locked v1 decisions (authoritative)
+- `docs/principles/loop-and-exit.md` — how the implement loop runs and **when it stops** (gate-verified done + exit conditions); runner `scripts/ralph.sh`
 
 ## Read ON-DEMAND (Read the file when the task matches — do NOT preload)
 | Task | Read |

@@ -24,3 +24,6 @@ test-results/
 playwright-report/
 blob-report/
 .last-run.json
+
+# Ralph loop runtime artifacts (logs, per-iteration JSON, BLOCKED marker)
+.ralph/
