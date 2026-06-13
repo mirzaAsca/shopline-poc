@@ -20,6 +20,8 @@ Order matters; lower phases first.
 - **Phase 2 — Pages, nav, i18n, SEO:** templates (`page.<handle>.json`), page records (Admin API), store menus, `i18n/<locale>.json`, handles + 301s + meta.
 - **Phase 3 — QA:** per-page side-by-side visual diff (desktop+mobile); fix-and-recheck tasks.
 
+> **Single-page units (`--page`):** the phases cover only that one page — the foundation it needs (skip if already built) → its sections → that one page/route + i18n/SEO → QA for that page. The full-site route-parity rule does not apply.
+
 ### Task format (every task is a checkbox)
 ```
 - [ ] <short task title>

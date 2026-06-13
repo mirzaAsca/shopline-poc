@@ -11,7 +11,7 @@ You build **productized, modular** SHOPLINE **Bottle** themes (Sline engine — 
 **Learning/debugging SHOPLINE?** Consult **official docs FIRST** (`docs/ops/shopline-references.md`) — don't brute-force/guess endpoints. Record the resolving doc link in `LEARNINGS.md`.
 
 ## Workflow — two phases (Ralph loop)
-1. **Plan** — `/plan-migration <source-url> [1:1|redesign]` → analyze the source, write a new checkbox spec in `specs/`. No code. (`prompts/PLAN.md`)
+1. **Plan** — `/plan-migration <source-url> [1:1|redesign] [--page]` → analyze the source (whole site, or just that one page with `--page`), write a new checkbox spec in `specs/`. No code. (`prompts/PLAN.md`)
 2. **Implement** — `/implement-next` → **one task per fresh context**: pick the most important unchecked task from the active `specs/*.md`, build it, write + run `tests/*.test.js`, run the desktop+mobile visual diff, tick the box, append to `LEARNINGS.md`, commit + push. Repeat. (`prompts/PROMPT.md`)
 
 Full rules in `docs/principles/agent-workflow.md`. **Log discoveries in `LEARNINGS.md`** — see its header for *when* to log and where to route durable fixes.
