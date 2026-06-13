@@ -62,7 +62,7 @@ SHOPLINE **does** have a native GitHub theme integration — admin **Theme libra
 
 ### Connecting SHOPLINE via GitHub (the `shopline-theme` branch)
 We keep a dedicated **theme-only branch `shopline-theme`** (only the theme dirs — no infra, no `.gitignore`, no `.env`) that SHOPLINE connects to; `main` stays the full project.
-1. Push the latest theme to it: **`scripts/sync-theme-branch.sh`** (copies *only* the theme paths from `main` → `shopline-theme`; never `git add -A`, so `.env` can't leak).
+1. Push the latest theme to it: **`scripts/sync-theme-branch.sh`** (copies *only* the theme paths from `main` → `shopline-theme`; never `git add -A`, so `.env` can't leak). The loop runs this **automatically** after every task (`/implement-next` close step + `scripts/ralph.sh` backstop), so the branch stays current; run it by hand only for out-of-loop theme edits.
 2. In the admin: **Theme library → Add theme → Add from GitHub** → pick this repo → branch **`shopline-theme`**.
 > **`main` is the source of truth.** Edit the theme locally and run the sync script. If you edit in the SHOPLINE admin, SHOPLINE commits back to `shopline-theme` — pull that into `main` before the next sync or it gets overwritten. ⚠️ Never put any non-theme file (or `.gitignore`) on `shopline-theme` — the import will reject it.
 

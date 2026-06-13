@@ -29,4 +29,4 @@ Before building, **search the codebase with parallel subagents** to confirm the 
 - Tick the task `[x]` in its `specs/*.md` file; record any non-obvious **decision + why** in that spec's Decision log.
 - **Append** what you learned to `LEARNINGS.md` per its header rubric (journal it; also fix `docs/` / `validation-status.md` if it's a durable correction) — never overwrite, only append.
 - Update `CLAUDE.md`/`docs/*` only if you discovered the guidance itself was wrong.
-- **Commit** with a detailed message and **push**. Then **stop** (the next loop is a fresh context).
+- **Commit** with a detailed message and **push** to `main`, then **mirror the theme to the GitHub-connect branch**: `scripts/sync-theme-branch.sh` (copies only the theme paths `main → shopline-theme`; safe — never touches `.env`/infra). Then **stop** (the next loop is a fresh context).

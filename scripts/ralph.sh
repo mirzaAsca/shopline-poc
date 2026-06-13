@@ -98,5 +98,10 @@ while :; do
   else
     no_progress=0
     log "progress: new commit ${head_after:0:9} (+\$$cost, total \$$spent)"
+    # mirror the theme to the GitHub-connect branch (deterministic backstop; the task also
+    # does this per PROMPT.md §6). Idempotent — a no-op when shopline-theme already matches.
+    if [ -x scripts/sync-theme-branch.sh ]; then
+      if scripts/sync-theme-branch.sh >>.ralph/ralph.err 2>&1; then log "mirrored theme -> shopline-theme"; else log "WARN: shopline-theme sync failed (see .ralph/ralph.err)"; fi
+    fi
   fi
 done
