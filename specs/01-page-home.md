@@ -12,13 +12,13 @@ A pixel-close replica of the **snazzy home page** on Bottle: a dark, art-deco br
 ## 3. Phases
 
 ### Phase 0 — Foundation (only what this page needs)
-- [ ] **Color schemes from brand tokens** → `theme.config.json`
+- [x] **Color schemes from brand tokens** → `theme.config.json`
       Goal: a dark scheme matching source — `color_background` #000, `color_text` #fff, `color_button_background` #fff, `color_button_text` #000, plus a **gold accent** var for the art-deco line/frame.
       References: `docs/craft/color-schemes.md`; source brand tokens (bg `rgb(0,0,0)`, text `rgb(255,255,255)`, button white/black, gold pattern).
       Steps: add scheme(s) under `theme.color_schemes`; keep one key-set across schemes; wire `components/theme-css-var.html` if a new var (gold) is added.
       Acceptance: schemes selectable on every section below.
       Tests:
-        - [ ] tests/home-foundation.test.js — guards the dark scheme + gold accent var exist, because every section below reads them.
+        - [x] tests/home-foundation.test.js — guards scheme-1 = snazzy dark tokens (#000/#fff, white/black buttons). Gold is image-borne (line-pattern/logo SVG) → no scheme var added.
 - [ ] **Typography: Inter** (display + body) → `font`/`layout`
       Goal: load Inter; display headings ~48px/700, body system stack fallback as source.
       References: `docs/craft/assets-and-fonts.md` (@font-face via component + `asset_url()`); source h2 = `Inter 48px/700`.
@@ -127,6 +127,7 @@ A pixel-close replica of the **snazzy home page** on Bottle: a dark, art-deco br
 - 2026-06-13 — **Overlays**: rebuild the **age-gate** natively and match it **strictly** (done-bar). The **Klaviyo email popup is an app** → excluded from the theme diff (can't theme-pixel-match an app embed); re-added post-migration.
 - 2026-06-13 — **Store-locator** ("find near you") rebuilt as a native CTA band; the live **liquorpilot** widget is an app embedded later via a stable hook.
 - 2026-06-13 — **Assets scraped** from the Webflow/partner CDNs into `public/images` (nothing provided).
+- 2026-06-13 — **Foundation built:** repurposed **scheme-1** as the snazzy dark default (`#000`/`#fff`, white/black buttons); scheme-4 was already near-dark. **Gold accent is image-borne** (line-pattern + logo SVGs) → no scheme color var added; revisit only if a gold CSS color surfaces. Deployed `theme.config.json` to Bottle1 [unpublished].
 
 ## 6. Validation / QA
 "Done = identical to source" proven by the merged original|new images for the home page at **desktop + mobile** (strict, overlays incl. age-gate), the pixel-diff scores, and the passing `tests/` above. On mismatch, `inspect.mjs` produces the exact element/property fix-list.
