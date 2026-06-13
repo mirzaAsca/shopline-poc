@@ -19,12 +19,12 @@ A pixel-close replica of the **snazzy home page** on Bottle: a dark, art-deco br
       Acceptance: schemes selectable on every section below.
       Tests:
         - [x] tests/home-foundation.test.js — guards scheme-1 = snazzy dark tokens (#000/#fff, white/black buttons). Gold is image-borne (line-pattern/logo SVG) → no scheme var added.
-- [ ] **Typography: Inter** (display + body) → `font`/`layout`
+- [x] **Typography: Inter** (display + body) → `font`/`layout`
       Goal: load Inter; display headings ~48px/700, body system stack fallback as source.
       References: `docs/craft/assets-and-fonts.md` (@font-face via component + `asset_url()`); source h2 = `Inter 48px/700`.
       Acceptance: headings render in Inter at desktop + mobile.
       Tests:
-        - [ ] tests/home-typography.test.js — guards Inter is applied to display headings (no fallback FOUT in the diff).
+        - [x] tests/home-typography.test.js — guards Inter is applied to display headings (no fallback FOUT in the diff).
 
 ### Phase 1 — Sections (one task per source block; brand-neutral, modular)
 - [ ] **`age-gate`** — full-screen 21+ entry overlay (rebuilt native)

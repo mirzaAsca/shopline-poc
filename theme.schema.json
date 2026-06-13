@@ -185,7 +185,7 @@
           "type": "font",
           "label": "t:settings_schema.font.settings.sort_title_font.label",
           "id": "sort_title_font",
-          "default": "Brygada 1918:700"
+          "default": "Inter:700"
         },
         {
           "type": "range",
@@ -201,7 +201,7 @@
           "type": "range",
           "id": "sort_title_size",
           "label": "t:settings_schema.font.settings.sort_title_size.label",
-          "default": 30,
+          "default": 29,
           "min": 22,
           "max": 100,
           "step": 1,
@@ -230,7 +230,7 @@
           "type": "font",
           "label": "t:settings_schema.font.settings.sort_body_font.label",
           "id": "sort_body_font",
-          "default": "Brygada 1918:400"
+          "default": "Inter:400"
         },
         {
           "type": "range",
